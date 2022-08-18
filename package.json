@@ -1,0 +1,31 @@
+{
+  "name": "@prephouse/utils",
+  "version": "1.0.0",
+  "description": "a library to hold resources used in both the admin and developer APIs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "postinstall": "husky install"
+  },
+  "keywords": [
+    "prephouse",
+    "course",
+    "question"
+  ],
+  "author": "prephouse",
+  "license": "ISC",
+  "dependencies": {
+    "env-schema": "^5.0.0",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.5.2",
+    "zod": "^3.18.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.183",
+    "husky": "^8.0.1",
+    "pinst": "^3.0.0"
+  },
+  "packageManager": "yarn@3.2.2"
+}
