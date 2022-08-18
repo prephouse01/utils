@@ -6,9 +6,6 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "husky install",
-    "postinstall": "husky install",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
     "build": "tsc",
     "package": "yarn run build && npm link"
   },
@@ -35,6 +32,5 @@
   },
   "files": [
     "dist"
-  ],
-  "packageManager": "yarn@3.2.2"
+  ]
 }
