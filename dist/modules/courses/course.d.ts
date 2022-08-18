@@ -44,4 +44,5 @@ export declare class Course {
     findOne(props: FindOneCourseType): Promise<Error | (ICourse & {
         _id: import("mongoose").Types.ObjectId;
     })>;
+    findMultiple(): Promise<Error>;
 }

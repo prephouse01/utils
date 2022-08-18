@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findOneQuestionSchema = void 0;
+exports.questionAnswerSchema = exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findQuestionSchema = void 0;
 const zod_1 = require("zod");
 const body = zod_1.z.object({
     course: zod_1.z.string({ required_error: "A course is required" }),
@@ -21,8 +21,10 @@ const questionMessage = zod_1.z.object({
         .max(150, { message: "Cannot be more than 150 characters" }),
     from: zod_1.z.string({ required_error: "A sender is required" }),
 });
-exports.findOneQuestionSchema = zod_1.z.object({
-    id: zod_1.z.string({ required_error: "a question id is required" }),
+exports.findQuestionSchema = zod_1.z.object({
+    id: zod_1.z
+        .string({ required_error: "a question id is required" })
+        .or(zod_1.z.array(zod_1.z.string())),
 });
 exports.questionUploadSchema = zod_1.z.object({
     question: body,
@@ -49,4 +51,11 @@ exports.questionFetchMetadataSchema = zod_1.z.object({
     courses: zod_1.z.array(zod_1.z.string()).optional().default([]),
     categories: zod_1.z.array(zod_1.z.enum(["primary", "secondary", "tertiary"])),
     examTypes: zod_1.z.array(zod_1.z.string()).optional().default([]),
+});
+const answer = zod_1.z.object({
+    questionId: zod_1.z.string({ required_error: "a question id is required" }),
+    answerId: zod_1.z.number({ required_error: "an answer is required" }),
+});
+exports.questionAnswerSchema = zod_1.z.object({
+    answers: zod_1.z.array(answer),
 });

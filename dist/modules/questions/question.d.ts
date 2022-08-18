@@ -24,7 +24,7 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { questionModel } from "./question.model";
-import { FindOneQuestionType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
+import { FindQuestionType, QuestionAnswerType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
 import { Env } from "../../utils/config";
 import { connectDB } from "../../utils/connectDB";
 export declare class Question {
@@ -37,7 +37,11 @@ export declare class Question {
      * @param props
      * @returns
      */
-    findOne(props: FindOneQuestionType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    find(props: FindQuestionType): Promise<Error | (import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }) | (import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    })[]>;
     /**
      *
      * @param props
@@ -57,4 +61,9 @@ export declare class Question {
      */
     edit(props: QuestionEditType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     sendMessage(props: QuestionSendMessageType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    answer(props: QuestionAnswerType): Promise<Error | {
+        isCorrect: boolean;
+        questionId: string;
+        answerId: number;
+    }[]>;
 }

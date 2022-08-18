@@ -39,19 +39,28 @@ class Question {
      * @param props
      * @returns
      */
-    findOne(props) {
+    find(props) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = (0, validateOptions_1.validateOption)(question_schema_1.findOneQuestionSchema)(props);
-                const question = yield this.QuestionModel.findById(id, {
-                    _id: 0,
-                    __v: 0,
-                });
-                if (!question)
-                    throw new Error("Didn't find a question");
+                const { id } = (0, validateOptions_1.validateOption)(question_schema_1.findQuestionSchema)(props);
+                let res;
+                if (typeof id === "string") {
+                    res = yield this.QuestionModel.findById(id, {
+                        _id: 0,
+                        __v: 0,
+                    });
+                }
+                else if (Array.isArray(id)) {
+                    res = yield this.QuestionModel.find({ _id: { $in: id } }, {
+                        _id: 0,
+                        __v: 0,
+                    });
+                }
+                if (!res)
+                    throw new Error("Didn't find any question");
                 (0, connectDB_1.disconnectDB)(this.connection);
-                return question.toJSON();
+                return res;
             }
             catch (error) {
                 (0, connectDB_1.disconnectDB)(this.connection);
@@ -305,6 +314,45 @@ class Question {
             catch (error) {
                 (0, connectDB_1.disconnectDB)(this.connection);
                 return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to send message");
+            }
+        });
+    }
+    answer(props) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { answers } = (0, validateOptions_1.validateOption)(question_schema_1.questionAnswerSchema)(props);
+                let res = [];
+                if (Array.isArray(answers)) {
+                    for (let i = 0; i < answers.length; i++) {
+                        const { questionId, answerId } = answers[i];
+                        const question = yield this.QuestionModel.findById(questionId);
+                        if (!question)
+                            throw new Error("Question not found");
+                        const isCorrect = question.answer.toString() === answerId.toString();
+                        res.push(Object.assign(Object.assign({}, answers[i]), { isCorrect }));
+                        if (isCorrect) {
+                            yield this.QuestionModel.findByIdAndUpdate(questionId, {
+                                $inc: {
+                                    "stats.passed": 1,
+                                },
+                            });
+                        }
+                        else {
+                            yield this.QuestionModel.findByIdAndUpdate(questionId, {
+                                $inc: {
+                                    "stats.failed": 1,
+                                },
+                            });
+                        }
+                    }
+                }
+                (0, connectDB_1.disconnectDB)(this.connection);
+                return res;
+            }
+            catch (error) {
+                (0, connectDB_1.disconnectDB)(this.connection);
+                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to answer question");
             }
         });
     }

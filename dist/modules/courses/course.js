@@ -111,5 +111,17 @@ class Course {
             }
         });
     }
+    findMultiple() {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                throw new Error("Unimplemented");
+            }
+            catch (error) {
+                (0, connectDB_1.disconnectDB)(this.connection);
+                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to find courses");
+            }
+        });
+    }
 }
 exports.Course = Course;
