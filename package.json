@@ -6,11 +6,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "package": "yarn run build && npm link",
+    "prepare": "husky install",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "build": "tsc",
+    "package": "yarn run build && npm link"
   },
   "keywords": [
     "prephouse",
