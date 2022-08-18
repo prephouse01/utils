@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "keywords": [
     "prephouse",
@@ -23,8 +25,10 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@types/lodash": "^4.14.183",
-    "husky": "^8.0.1",
+    "husky": "^6.0.0",
     "pinst": "^3.0.0"
   },
   "packageManager": "yarn@3.2.2"
