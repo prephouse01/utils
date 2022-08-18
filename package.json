@@ -1,7 +1,6 @@
 {
   "name": "@prephouse/utils",
   "version": "1.0.0",
-  "private": "false",
   "description": "a library to hold resources used in both the admin and developer APIs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,14 +24,14 @@
     "env-schema": "^5.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.5.2",
+    "pinst": "^3.0.0",
     "zod": "^3.18.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
     "@types/lodash": "^4.14.183",
-    "husky": "^8.0.0",
-    "pinst": "^3.0.0"
+    "husky": "^8.0.0"
   },
   "files": [
     "dist"
