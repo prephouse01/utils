@@ -29,6 +29,10 @@ export class Question {
     this.QuestionModel = questionModel(this.connection);
   }
 
+  closeConnection() {
+    disconnectDB(this.connection);
+  }
+
   /**
    *
    * @param props
@@ -54,10 +58,8 @@ export class Question {
         );
       }
       if (!res) throw new Error("Didn't find any question");
-      disconnectDB(this.connection);
       return res;
     } catch (error: any) {
-      disconnectDB(this.connection);
       return new Error(error.message ?? "Didn't find a question");
     }
   }
@@ -387,7 +389,7 @@ export class Question {
           const question = await this.QuestionModel.findById(questionId);
           if (!question) throw new Error("Question not found");
           const isCorrect = question.answer.toString() === answerId.toString();
-          
+
           res.push({ ...answers[i], isCorrect });
 
           if (isCorrect) {

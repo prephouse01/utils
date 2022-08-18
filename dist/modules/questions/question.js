@@ -43,6 +43,7 @@ class Question {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("here");
                 const { id } = (0, validateOptions_1.validateOption)(question_schema_1.findQuestionSchema)(props);
                 let res;
                 if (typeof id === "string") {
@@ -50,6 +51,7 @@ class Question {
                         _id: 0,
                         __v: 0,
                     });
+                    console.log(res);
                 }
                 else if (Array.isArray(id)) {
                     res = yield this.QuestionModel.find({ _id: { $in: id } }, {
@@ -57,6 +59,7 @@ class Question {
                         __v: 0,
                     });
                 }
+                console.log(res);
                 if (!res)
                     throw new Error("Didn't find any question");
                 (0, connectDB_1.disconnectDB)(this.connection);
