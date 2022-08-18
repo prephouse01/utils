@@ -1,14 +1,13 @@
 {
   "name": "@prephouse/utils",
   "version": "1.0.0",
+  "private": "false",
   "description": "a library to hold resources used in both the admin and developer APIs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "ts --watch src/index.ts",
     "package": "yarn run build && npm link",
-    "test": "yarn run build && node dist/index.js",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
@@ -31,7 +30,7 @@
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
     "@types/lodash": "^4.14.183",
-    "husky": "^6.0.0",
+    "husky": "^8.0.0",
     "pinst": "^3.0.0"
   },
   "files": [
