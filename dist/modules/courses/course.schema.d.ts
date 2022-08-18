@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 export declare const createCourseSchema: z.ZodObject<{
     avatar: z.ZodOptional<z.ZodString>;
     category: z.ZodEnum<["primary", "secondary", "tertiary;"]>;
@@ -48,6 +48,20 @@ export declare const deleteCourseSchema: z.ZodObject<{
 }, {
     id: string;
 }>;
+export declare const findOneCourseSchema: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    category: z.ZodOptional<z.ZodEnum<["primary", "secondary", "tertiary;"]>>;
+    course: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    id?: string | undefined;
+    course?: string | undefined;
+    category?: "primary" | "secondary" | "tertiary;" | undefined;
+}, {
+    id?: string | undefined;
+    course?: string | undefined;
+    category?: "primary" | "secondary" | "tertiary;" | undefined;
+}>;
 export declare type CreateCourseType = z.infer<typeof createCourseSchema>;
 export declare type EditCourseType = z.infer<typeof editCourseSchema>;
 export declare type DeleteCourseType = z.infer<typeof deleteCourseSchema>;
+export declare type FindOneCourseType = z.infer<typeof findOneCourseSchema>;

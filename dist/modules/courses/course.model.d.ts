@@ -23,5 +23,6 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Schema } from "mongoose";
+import { connectDB } from "../../utils/connectDB";
 import { ICourse as Course } from "./course.interface";
-export declare const CourseModel: import("mongoose").Model<Course, {}, {}, {}, Schema<Course, import("mongoose").Model<Course, any, any, any, any>, {}, {}, {}, {}, "type", Course>>;
+export declare function courseModel(M: ReturnType<typeof connectDB>): import("mongoose").Model<Course, {}, {}, {}, Schema<Course, import("mongoose").Model<Course, any, any, any, any>, {}, {}, {}, {}, "type", Course>>;

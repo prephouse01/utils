@@ -21,8 +21,10 @@ const questionMessage = z.object({
   from: z.string({ required_error: "A sender is required" }),
 });
 
-export const fetchAllQuestionsSchema = z.object({
-  id: z.string({ required_error: "a question id is required" }),
+export const findQuestionSchema = z.object({
+  id: z
+    .string({ required_error: "a question id is required" })
+    .or(z.array(z.string())),
 });
 
 export const questionUploadSchema = z.object({
@@ -56,7 +58,16 @@ export const questionFetchMetadataSchema = z.object({
   examTypes: z.array(z.string()).optional().default([]),
 });
 
-export type FetchAllQuestionsType = z.infer<typeof fetchAllQuestionsSchema>;
+const answer = z.object({
+  questionId: z.string({ required_error: "a question id is required" }),
+  answerId: z.number({ required_error: "an answer is required" }),
+});
+
+export const questionAnswerSchema = z.object({
+  answers: z.array(answer),
+});
+
+export type FindQuestionType = z.infer<typeof findQuestionSchema>;
 export type QuestionUploadType = z.infer<typeof questionUploadSchema>;
 export type QuestionReviewType = z.infer<typeof questionReviewSchema>;
 export type QuestionEditType = z.infer<typeof questionEditSchema>;
@@ -64,3 +75,4 @@ export type QuestionSendMessageType = z.infer<typeof questionSendMessageSchema>;
 export type QuestionFetchMetadataType = z.infer<
   typeof questionFetchMetadataSchema
 >;
+export type QuestionAnswerType = z.infer<typeof questionAnswerSchema>;

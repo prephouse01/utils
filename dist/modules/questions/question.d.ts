@@ -23,39 +23,38 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { FetchAllQuestionsType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
+import { questionModel } from "./question.model";
+import { FindOneQuestionType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
+import { Env } from "../../utils/config";
+import { connectDB } from "../../utils/connectDB";
 export declare class Question {
+    config: Env;
+    connection: ReturnType<typeof connectDB>;
+    QuestionModel: ReturnType<typeof questionModel>;
+    constructor(props: Env);
     /**
      *
      * @param props
      * @returns
      */
-    static fetchOneQuestions(props: FetchAllQuestionsType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
+    findOne(props: FindOneQuestionType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     /**
      *
      * @param props
      * @returns
      */
-    static uploadQuestion(props: QuestionUploadType): Promise<(import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
-    }) | undefined>;
+    upload(props: QuestionUploadType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     /**
      *
      * @param props
      * @returns
      */
-    static review(props: QuestionReviewType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
+    review(props: QuestionReviewType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     /**
      *
      * @param props
      * @returns
      */
-    static edit(props: QuestionEditType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
-    static message(props: QuestionSendMessageType): Promise<void>;
+    edit(props: QuestionEditType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    sendMessage(props: QuestionSendMessageType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
 }

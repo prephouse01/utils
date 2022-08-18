@@ -1,12 +1,17 @@
-import mongoose from "mongoose";
-import { config } from "./config";
+import mongoose, { connection } from "mongoose";
 
-export async function connectDB() {
+export function connectDB(uri: string) {
   try {
-    const db = await mongoose.connect(config.DB_URL);
+    const db = mongoose.createConnection(uri);
+    console.log("DB connected");
     return db;
   } catch (err: any) {
-    console.log(err);
+    console.log(err.message);
     process.exit(1);
   }
 }
+
+export function disconnectDB(connection: ReturnType<typeof connectDB>) {
+  connection.close();
+}
+

@@ -23,11 +23,25 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { CreateCourseType, DeleteCourseType, EditCourseType } from "./course.schema";
+import { courseModel } from "./course.model";
+import { CreateCourseType, DeleteCourseType, EditCourseType, FindOneCourseType } from "./course.schema";
+import { Env } from "../../utils/config";
+import { connectDB } from "../../utils/connectDB";
+import { ICourse } from "./course.interface";
 export declare class Course {
-    static create(props: CreateCourseType): Promise<import("./course.interface").ICourse & {
+    config: Env;
+    connection: ReturnType<typeof connectDB>;
+    CourseModel: ReturnType<typeof courseModel>;
+    constructor(props: Env);
+    create(props: CreateCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    edit(props: EditCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    delete(props: DeleteCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    /**
+     * @description find a course by id or course and category
+     * @param props
+     * @returns {ICourse} course
+     */
+    findOne(props: FindOneCourseType): Promise<Error | (ICourse & {
         _id: import("mongoose").Types.ObjectId;
-    }>;
-    static edit(props: EditCourseType): Promise<void>;
-    static deleteCourse(props: DeleteCourseType): Promise<void>;
+    })>;
 }

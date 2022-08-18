@@ -1,5 +1,4 @@
-import { validateOption } from "src/utils/validateOptions";
-import { CourseModel } from "./course.model";
+import { courseModel } from "./course.model";
 import {
   createCourseSchema,
   CreateCourseType,
@@ -7,37 +6,115 @@ import {
   DeleteCourseType,
   editCourseSchema,
   EditCourseType,
+  findOneCourseSchema,
+  FindOneCourseType,
 } from "./course.schema";
 import { omit } from "lodash";
+import { validateOption } from "../../utils/validateOptions";
+import { config, Env } from "../../utils/config";
+import { connectDB, disconnectDB } from "../../utils/connectDB";
+import { ICourse } from "./course.interface";
 
 export class Course {
-  static async create(props: CreateCourseType) {
+  config: Env;
+  connection: ReturnType<typeof connectDB>;
+  CourseModel: ReturnType<typeof courseModel>;
+
+  constructor(props: Env) {
+    this.config = config(props);
+    this.connection = connectDB(this.config.DB_URL);
+    this.CourseModel = courseModel(this.connection);
+  }
+
+  async create(props: CreateCourseType) {
     try {
+      // verify input schema
       const data = validateOption<CreateCourseType>(createCourseSchema)(props);
-      const course = await CourseModel.findOne({ course: data.course });
-      if (course) throw new Error(`Course ${data.course} already exists`);
-      return await CourseModel.create(props);
+      // create new course
+      const course = await this.CourseModel.findOne({
+        course: data.course,
+        category: data.category,
+      });
+      if (course)
+        throw new Error(
+          `${data.course.toUpperCase()} already exists for ${data.category.toUpperCase()} category`
+        );
+
+      const newCourse = await this.CourseModel.create(props);
+      disconnectDB(this.connection);
+      return newCourse.toJSON();
     } catch (error: any) {
-      throw new Error(error.message ?? "Failed to create a new course");
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to create a new course");
     }
   }
 
-  static async edit(props: EditCourseType) {
+  async edit(props: EditCourseType) {
     try {
       const data = validateOption<EditCourseType>(editCourseSchema)(props);
-      await CourseModel.findOneAndUpdate({ id: props.id }, omit(data, ["id"]));
+      const course = await this.CourseModel.findOneAndUpdate(
+        { id: props.id },
+        omit(data, ["id"]),
+        { new: true }
+      );
+      if (!course) throw new Error("no course found");
+      disconnectDB(this.connection);
+      return course.toJSON();
     } catch (error: any) {
-      throw new Error("Failed to edit this course course");
+      disconnectDB(this.connection);
+      return new Error("Failed to edit this course course");
     }
   }
 
-  static async deleteCourse(props: DeleteCourseType) {
+  async delete(props: DeleteCourseType) {
     try {
       const { id } =
         validateOption<DeleteCourseType>(deleteCourseSchema)(props);
-      await CourseModel.findOneAndDelete({ _id: id });
+      const course = await this.CourseModel.findOneAndDelete({ _id: id });
+      if (!course) throw new Error("no course found");
+      disconnectDB(this.connection);
+      return course.toJSON();
     } catch (error: any) {
-      throw new Error("Failed to delete this course");
+      disconnectDB(this.connection);
+      return new Error("Failed to delete this course");
+    }
+  }
+
+  /**
+   * @description find a course by id or course and category
+   * @param props
+   * @returns {ICourse} course
+   */
+  async findOne(props: FindOneCourseType) {
+    try {
+      const { id, course, category } =
+        validateOption<FindOneCourseType>(findOneCourseSchema)(props);
+      let c;
+      if (id) {
+        c = await this.CourseModel.findById(id);
+      } else if (course && category) {
+        c = await this.CourseModel.findOne({
+          course,
+          category,
+        });
+      } else {
+        throw new Error("Invalid search parameters");
+      }
+      if (!c) throw new Error("no course found");
+      disconnectDB(this.connection);
+      return c;
+    } catch (error: any) {
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to fetch course");
+    }
+  }
+
+  async findMultiple() {
+    try {
+      throw new Error("Unimplemented");
+    } catch (error: any) {
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to find courses");
     }
   }
 }

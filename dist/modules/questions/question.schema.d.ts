@@ -1,5 +1,5 @@
 import { z } from "zod";
-export declare const fetchAllQuestionsSchema: z.ZodObject<{
+export declare const findOneQuestionSchema: z.ZodObject<{
     id: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     id: string;
@@ -189,7 +189,7 @@ export declare const questionFetchMetadataSchema: z.ZodObject<{
     action: "review" | "upload";
     categories: ("primary" | "secondary" | "tertiary")[];
 }>;
-export declare type FetchAllQuestionsType = z.infer<typeof fetchAllQuestionsSchema>;
+export declare type FindOneQuestionType = z.infer<typeof findOneQuestionSchema>;
 export declare type QuestionUploadType = z.infer<typeof questionUploadSchema>;
 export declare type QuestionReviewType = z.infer<typeof questionReviewSchema>;
 export declare type QuestionEditType = z.infer<typeof questionEditSchema>;

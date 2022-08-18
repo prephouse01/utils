@@ -1,9 +1,9 @@
-import { config } from "src/utils/config";
-import { validateOption } from "src/utils/validateOptions";
-import { QuestionModel } from "./question.model";
+import { questionModel } from "./question.model";
 import {
-  fetchAllQuestionsSchema,
-  FetchAllQuestionsType,
+  findQuestionSchema,
+  FindQuestionType,
+  questionAnswerSchema,
+  QuestionAnswerType,
   questionEditSchema,
   QuestionEditType,
   questionReviewSchema,
@@ -15,26 +15,50 @@ import {
 } from "./question.schema";
 import { pick } from "lodash";
 import { AdminModel } from "../admin";
+import { validateOption } from "../../utils/validateOptions";
+import { config, Env } from "../../utils/config";
+import { connectDB, disconnectDB } from "../../utils/connectDB";
 
 export class Question {
+  config: Env;
+  connection: ReturnType<typeof connectDB>;
+  QuestionModel: ReturnType<typeof questionModel>;
+  constructor(props: Env) {
+    this.config = config(props);
+    this.connection = connectDB(this.config.DB_URL);
+    this.QuestionModel = questionModel(this.connection);
+  }
+
   /**
    *
    * @param props
    * @returns
    */
-  static async fetchOneQuestions(props: FetchAllQuestionsType) {
+  async find(props: FindQuestionType) {
     try {
-      const { id } = validateOption<FetchAllQuestionsType>(
-        fetchAllQuestionsSchema
-      )(props);
-      const question = await QuestionModel.findById(id, {
-        _id: 0,
-        __v: 0,
-      });
-      if (!question) throw new Error("Didn't find a question");
-      return question;
+      const { id } =
+        validateOption<FindQuestionType>(findQuestionSchema)(props);
+      let res;
+      if (typeof id === "string") {
+        res = await this.QuestionModel.findById(id, {
+          _id: 0,
+          __v: 0,
+        });
+      } else if (Array.isArray(id)) {
+        res = await this.QuestionModel.find(
+          { _id: { $in: id } },
+          {
+            _id: 0,
+            __v: 0,
+          }
+        );
+      }
+      if (!res) throw new Error("Didn't find any question");
+      disconnectDB(this.connection);
+      return res;
     } catch (error: any) {
-      throw new Error("Didn't find a question");
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Didn't find a question");
     }
   }
 
@@ -54,7 +78,7 @@ export class Question {
   //       lastReviewedOn: 1,
   //     };
 
-  //     let questions = QuestionModel.find(query, fields).lean();
+  //     let questions = this.QuestionModel.find(query, fields).lean();
 
   //     return questions;
   //   } catch (error: any) {
@@ -67,17 +91,17 @@ export class Question {
    * @param props
    * @returns
    */
-  static async uploadQuestion(props: QuestionUploadType) {
+  async upload(props: QuestionUploadType) {
     try {
       const { question, uploadedBy } =
         validateOption<QuestionUploadType>(questionUploadSchema)(props);
 
       const { answer, ...rest } = question;
 
-      const upload_cost = config.UPLOAD_QUESTION_COST / 2;
+      const upload_cost = this.config.UPLOAD_QUESTION_COST / 2;
 
       // UPLOAD QUESTION
-      const newQuestion = await new QuestionModel({
+      const newQuestion = await new this.QuestionModel({
         ...rest,
         options: rest.options.map((option) => ({ option })),
         reviewPending: true,
@@ -95,9 +119,12 @@ export class Question {
           "revenue.total": upload_cost,
         },
       });
-
-      return newQuestion;
-    } catch (error: any) {}
+      disconnectDB(this.connection);
+      return newQuestion.toJSON();
+    } catch (error: any) {
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to upload question");
+    }
   }
 
   /**
@@ -105,21 +132,21 @@ export class Question {
    * @param props
    * @returns
    */
-  static async review(props: QuestionReviewType) {
+  async review(props: QuestionReviewType) {
     try {
       const { id, passed, reviewerId, message } =
         validateOption<QuestionReviewType>(questionReviewSchema)(props);
       let question;
 
-      const existingQuestion = await QuestionModel.findById(id);
+      const existingQuestion = await this.QuestionModel.findById(id);
 
       if (!existingQuestion) throw new Error("Question not found");
 
       let update = {};
 
-      const upload_cost = config.UPLOAD_QUESTION_COST / 2;
+      const upload_cost = this.config.UPLOAD_QUESTION_COST / 2;
 
-      const review_cost = config.REVIEW_QUESTION_COST / 2;
+      const review_cost = this.config.REVIEW_QUESTION_COST / 2;
 
       // question hasn't been reviewed before
       if (!existingQuestion.lastReviewedBy) {
@@ -138,7 +165,7 @@ export class Question {
 
       // QUESTION PASSED REVIEW
       if (passed) {
-        question = await QuestionModel.findByIdAndUpdate(
+        question = await this.QuestionModel.findByIdAndUpdate(
           id,
           {
             reviewPending: false,
@@ -213,7 +240,7 @@ export class Question {
 
       // QUESTION FAILED REVIEW
       else {
-        question = await QuestionModel.findByIdAndUpdate(
+        question = await this.QuestionModel.findByIdAndUpdate(
           id,
           {
             $set: {
@@ -249,9 +276,11 @@ export class Question {
           },
         });
       }
-      return question;
+      disconnectDB(this.connection);
+      return question.toJSON();
     } catch (error: any) {
-      throw new Error(error.message ?? "Failed to review questions");
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to review questions");
     }
   }
 
@@ -260,7 +289,7 @@ export class Question {
    * @param props
    * @returns
    */
-  static async edit(props: QuestionEditType) {
+  async edit(props: QuestionEditType) {
     try {
       const { id, editedBy } =
         validateOption<QuestionEditType>(questionEditSchema)(props);
@@ -276,7 +305,7 @@ export class Question {
       const { answer, options, ...rest } = question;
       const upload_cost =
         parseFloat(process.env.UPLOAD_QUESTION_COST as string) / 2;
-      const existingQuestion = await QuestionModel.findById(id);
+      const existingQuestion = await this.QuestionModel.findById(id);
 
       if (!existingQuestion) throw new Error("Question not found");
 
@@ -292,7 +321,7 @@ export class Question {
 
       // if(existingQuestion.uploadedBy !== editedBy) throw new HttpException("You can't edit this question")
 
-      const newQuestion = await QuestionModel.findByIdAndUpdate(
+      const newQuestion = await this.QuestionModel.findByIdAndUpdate(
         id,
         {
           ...rest,
@@ -317,23 +346,70 @@ export class Question {
           "revenue.total": upload_cost,
         },
       });
-      return newQuestion;
+      disconnectDB(this.connection);
+      return newQuestion.toJSON();
     } catch (error: any) {
-      throw new Error(error.message ?? "Failed to create new questions");
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to create new questions");
     }
   }
 
-  static async message(props: QuestionSendMessageType) {
+  async sendMessage(props: QuestionSendMessageType) {
     try {
       const { questionId, message, reviewerId } =
         validateOption<QuestionSendMessageType>(questionSendMessageSchema)(
           props
         );
-      await QuestionModel.findByIdAndUpdate(questionId, {
-        $push: { messages: message, from: reviewerId },
-      });
+      const msg = await this.QuestionModel.findByIdAndUpdate(
+        questionId,
+        {
+          $push: { messages: message, from: reviewerId },
+        },
+        { new: true }
+      );
+      if (!msg) throw new Error("Failed to send message");
+      disconnectDB(this.connection);
+      return msg.toJSON();
     } catch (error: any) {
-      throw new Error(error.message ?? "Failed to send message");
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to send message");
+    }
+  }
+
+  async answer(props: QuestionAnswerType) {
+    try {
+      const { answers } =
+        validateOption<QuestionAnswerType>(questionAnswerSchema)(props);
+      let res = [];
+      if (Array.isArray(answers)) {
+        for (let i = 0; i < answers.length; i++) {
+          const { questionId, answerId } = answers[i];
+          const question = await this.QuestionModel.findById(questionId);
+          if (!question) throw new Error("Question not found");
+          const isCorrect = question.answer.toString() === answerId.toString();
+          
+          res.push({ ...answers[i], isCorrect });
+
+          if (isCorrect) {
+            await this.QuestionModel.findByIdAndUpdate(questionId, {
+              $inc: {
+                "stats.passed": 1,
+              },
+            });
+          } else {
+            await this.QuestionModel.findByIdAndUpdate(questionId, {
+              $inc: {
+                "stats.failed": 1,
+              },
+            });
+          }
+        }
+      }
+      disconnectDB(this.connection);
+      return res;
+    } catch (error: any) {
+      disconnectDB(this.connection);
+      return new Error(error.message ?? "Failed to answer question");
     }
   }
 }

@@ -23,5 +23,6 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
+import { connectDB } from "../../utils/connectDB";
 import { IQuestion as Question } from "./question.interface";
-export declare const QuestionModel: import("mongoose").Model<Question, {}, {}, {}, any>;
+export declare function questionModel(M: ReturnType<typeof connectDB>): import("mongoose").Model<Question, {}, {}, {}, any>;

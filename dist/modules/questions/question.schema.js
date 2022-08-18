@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.fetchAllQuestionsSchema = void 0;
+exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findOneQuestionSchema = void 0;
 const zod_1 = require("zod");
 const body = zod_1.z.object({
     course: zod_1.z.string({ required_error: "A course is required" }),
@@ -21,7 +21,7 @@ const questionMessage = zod_1.z.object({
         .max(150, { message: "Cannot be more than 150 characters" }),
     from: zod_1.z.string({ required_error: "A sender is required" }),
 });
-exports.fetchAllQuestionsSchema = zod_1.z.object({
+exports.findOneQuestionSchema = zod_1.z.object({
     id: zod_1.z.string({ required_error: "a question id is required" }),
 });
 exports.questionUploadSchema = zod_1.z.object({
