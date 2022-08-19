@@ -18,50 +18,50 @@ export declare const questionUploadSchema: z.ZodObject<{
         year: z.ZodOptional<z.ZodString>;
         options: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
-        year?: string | undefined;
         instructions?: string | undefined;
+        year?: string | undefined;
         course: string;
         examType: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     }, {
+        instructions?: string | undefined;
         examType?: string | undefined;
         year?: string | undefined;
-        instructions?: string | undefined;
         course: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     }>;
     uploadedBy: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     question: {
-        year?: string | undefined;
         instructions?: string | undefined;
+        year?: string | undefined;
         course: string;
         examType: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     };
     uploadedBy: string;
 }, {
     question: {
+        instructions?: string | undefined;
         examType?: string | undefined;
         year?: string | undefined;
-        instructions?: string | undefined;
         course: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     };
     uploadedBy: string;
@@ -94,55 +94,55 @@ export declare const questionEditSchema: z.ZodObject<{
         year: z.ZodOptional<z.ZodString>;
         options: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
-        year?: string | undefined;
         instructions?: string | undefined;
+        year?: string | undefined;
         course: string;
         examType: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     }, {
+        instructions?: string | undefined;
         examType?: string | undefined;
         year?: string | undefined;
-        instructions?: string | undefined;
         course: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     }>;
     id: z.ZodString;
     editedBy: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    id: string;
     question: {
-        year?: string | undefined;
         instructions?: string | undefined;
+        year?: string | undefined;
         course: string;
         examType: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     };
+    id: string;
     editedBy: string;
 }, {
-    id: string;
     question: {
+        instructions?: string | undefined;
         examType?: string | undefined;
         year?: string | undefined;
-        instructions?: string | undefined;
         course: string;
         category: "primary" | "secondary" | "tertiary";
+        options: string[];
         answer: number;
         question: string;
-        options: string[];
         topic: string;
     };
+    id: string;
     editedBy: string;
 }>;
 export declare const questionSendMessageSchema: z.ZodObject<{

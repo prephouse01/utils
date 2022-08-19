@@ -14,12 +14,10 @@ const course_model_1 = require("./course.model");
 const course_schema_1 = require("./course.schema");
 const lodash_1 = require("lodash");
 const validateOptions_1 = require("../../utils/validateOptions");
-const config_1 = require("../../utils/config");
-const connectDB_1 = require("../../utils/connectDB");
-class Course {
+const base_1 = require("../../utils/base");
+class Course extends base_1.Base {
     constructor(props) {
-        this.config = (0, config_1.config)(props);
-        this.connection = (0, connectDB_1.connectDB)(this.config.DB_URL);
+        super(props);
         this.CourseModel = (0, course_model_1.courseModel)(this.connection);
     }
     create(props) {
@@ -36,12 +34,10 @@ class Course {
                 if (course)
                     throw new Error(`${data.course.toUpperCase()} already exists for ${data.category.toUpperCase()} category`);
                 const newCourse = yield this.CourseModel.create(props);
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return newCourse.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to create a new course");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to create a new course");
             }
         });
     }
@@ -52,12 +48,10 @@ class Course {
                 const course = yield this.CourseModel.findOneAndUpdate({ id: props.id }, (0, lodash_1.omit)(data, ["id"]), { new: true });
                 if (!course)
                     throw new Error("no course found");
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return course.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error("Failed to edit this course course");
+                throw new Error("Failed to edit this course course");
             }
         });
     }
@@ -68,20 +62,18 @@ class Course {
                 const course = yield this.CourseModel.findOneAndDelete({ _id: id });
                 if (!course)
                     throw new Error("no course found");
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return course.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error("Failed to delete this course");
+                throw new Error("Failed to delete this course");
             }
         });
     }
-    /**
-     * @description find a course by id or course and category
-     * @param props
-     * @returns {ICourse} course
-     */
+    // /**
+    //  * @description find a course by id or course and category
+    //  * @param props
+    //  * @returns {ICourse} course
+    //  */
     findOne(props) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
@@ -102,12 +94,10 @@ class Course {
                 }
                 if (!c)
                     throw new Error("no course found");
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return c;
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to fetch course");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to fetch course");
             }
         });
     }
@@ -118,8 +108,7 @@ class Course {
                 throw new Error("Unimplemented");
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to find courses");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to find courses");
             }
         });
     }

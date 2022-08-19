@@ -23,13 +23,11 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { questionModel } from "./question.model";
 import { FindQuestionType, QuestionAnswerType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
 import { Env } from "../../utils/config";
-import { connectDB } from "../../utils/connectDB";
-export declare class Question {
-    config: Env;
-    connection: ReturnType<typeof connectDB>;
+import { Base } from "../../utils/base";
+import { questionModel } from "./question.model";
+export declare class Question extends Base {
     QuestionModel: ReturnType<typeof questionModel>;
     constructor(props: Env);
     /**
@@ -37,7 +35,7 @@ export declare class Question {
      * @param props
      * @returns
      */
-    find(props: FindQuestionType): Promise<Error | (import("./question.interface").IQuestion & {
+    find(props: FindQuestionType): Promise<(import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
     }) | (import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
@@ -61,7 +59,7 @@ export declare class Question {
      */
     edit(props: QuestionEditType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     sendMessage(props: QuestionSendMessageType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    answer(props: QuestionAnswerType): Promise<Error | {
+    answer(props: QuestionAnswerType): Promise<{
         isCorrect: boolean;
         questionId: string;
         answerId: number;

@@ -28,16 +28,16 @@ export declare const editCourseSchema: z.ZodObject<z.extendShape<{
     id: z.ZodString;
 }>, "strip", z.ZodTypeAny, {
     avatar?: string | undefined;
-    id: string;
     course: string;
     category: "primary" | "secondary" | "tertiary;";
+    id: string;
     examTypes: string[];
     topics: string[];
 }, {
     avatar?: string | undefined;
-    id: string;
     course: string;
     category: "primary" | "secondary" | "tertiary;";
+    id: string;
     examTypes: string[];
     topics: string[];
 }>;
@@ -53,13 +53,13 @@ export declare const findOneCourseSchema: z.ZodObject<{
     category: z.ZodOptional<z.ZodEnum<["primary", "secondary", "tertiary;"]>>;
     course: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    id?: string | undefined;
     course?: string | undefined;
     category?: "primary" | "secondary" | "tertiary;" | undefined;
+    id?: string | undefined;
 }, {
-    id?: string | undefined;
     course?: string | undefined;
     category?: "primary" | "secondary" | "tertiary;" | undefined;
+    id?: string | undefined;
 }>;
 export declare type CreateCourseType = z.infer<typeof createCourseSchema>;
 export declare type EditCourseType = z.infer<typeof editCourseSchema>;

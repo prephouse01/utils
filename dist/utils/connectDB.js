@@ -8,11 +8,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 function connectDB(uri) {
     try {
         const db = mongoose_1.default.createConnection(uri);
-        console.log("DB connected");
         return db;
     }
     catch (err) {
-        console.log(err.message);
         process.exit(1);
     }
 }

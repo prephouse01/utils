@@ -26,23 +26,16 @@
 import { courseModel } from "./course.model";
 import { CreateCourseType, DeleteCourseType, EditCourseType, FindOneCourseType } from "./course.schema";
 import { Env } from "../../utils/config";
-import { connectDB } from "../../utils/connectDB";
 import { ICourse } from "./course.interface";
-export declare class Course {
-    config: Env;
-    connection: ReturnType<typeof connectDB>;
+import { Base } from "../../utils/base";
+export declare class Course extends Base {
     CourseModel: ReturnType<typeof courseModel>;
     constructor(props: Env);
     create(props: CreateCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     edit(props: EditCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
     delete(props: DeleteCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    /**
-     * @description find a course by id or course and category
-     * @param props
-     * @returns {ICourse} course
-     */
-    findOne(props: FindOneCourseType): Promise<Error | (ICourse & {
+    findOne(props: FindOneCourseType): Promise<ICourse & {
         _id: import("mongoose").Types.ObjectId;
-    })>;
-    findMultiple(): Promise<Error>;
+    }>;
+    findMultiple(): Promise<void>;
 }

@@ -21,17 +21,15 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Question = void 0;
-const question_model_1 = require("./question.model");
 const question_schema_1 = require("./question.schema");
 const lodash_1 = require("lodash");
 const admin_1 = require("../admin");
 const validateOptions_1 = require("../../utils/validateOptions");
-const config_1 = require("../../utils/config");
-const connectDB_1 = require("../../utils/connectDB");
-class Question {
+const base_1 = require("../../utils/base");
+const question_model_1 = require("./question.model");
+class Question extends base_1.Base {
     constructor(props) {
-        this.config = (0, config_1.config)(props);
-        this.connection = (0, connectDB_1.connectDB)(this.config.DB_URL);
+        super(props);
         this.QuestionModel = (0, question_model_1.questionModel)(this.connection);
     }
     /**
@@ -43,7 +41,6 @@ class Question {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("here");
                 const { id } = (0, validateOptions_1.validateOption)(question_schema_1.findQuestionSchema)(props);
                 let res;
                 if (typeof id === "string") {
@@ -51,7 +48,6 @@ class Question {
                         _id: 0,
                         __v: 0,
                     });
-                    console.log(res);
                 }
                 else if (Array.isArray(id)) {
                     res = yield this.QuestionModel.find({ _id: { $in: id } }, {
@@ -59,15 +55,12 @@ class Question {
                         __v: 0,
                     });
                 }
-                console.log(res);
                 if (!res)
                     throw new Error("Didn't find any question");
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return res;
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Didn't find a question");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Didn't find a question");
             }
         });
     }
@@ -115,12 +108,10 @@ class Question {
                         "revenue.total": upload_cost,
                     },
                 });
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return newQuestion.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to upload question");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to upload question");
             }
         });
     }
@@ -236,12 +227,10 @@ class Question {
                         },
                     });
                 }
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return question.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_b = error.message) !== null && _b !== void 0 ? _b : "Failed to review questions");
+                throw new Error((_b = error.message) !== null && _b !== void 0 ? _b : "Failed to review questions");
             }
         });
     }
@@ -292,12 +281,10 @@ class Question {
                         "revenue.total": upload_cost,
                     },
                 });
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return newQuestion.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to create new questions");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to create new questions");
             }
         });
     }
@@ -311,12 +298,10 @@ class Question {
                 }, { new: true });
                 if (!msg)
                     throw new Error("Failed to send message");
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return msg.toJSON();
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to send message");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to send message");
             }
         });
     }
@@ -350,12 +335,10 @@ class Question {
                         }
                     }
                 }
-                (0, connectDB_1.disconnectDB)(this.connection);
                 return res;
             }
             catch (error) {
-                (0, connectDB_1.disconnectDB)(this.connection);
-                return new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to answer question");
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to answer question");
             }
         });
     }
