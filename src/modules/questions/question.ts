@@ -1,4 +1,3 @@
-import { questionModel } from "./question.model";
 import {
   findQuestionSchema,
   FindQuestionType,
@@ -16,21 +15,15 @@ import {
 import { pick } from "lodash";
 import { AdminModel } from "../admin";
 import { validateOption } from "../../utils/validateOptions";
-import { config, Env } from "../../utils/config";
-import { connectDB, disconnectDB } from "../../utils/connectDB";
+import { Env } from "../../utils/config";
+import { Base } from "../../utils/base";
+import { questionModel } from "./question.model";
 
-export class Question {
-  config: Env;
-  connection: ReturnType<typeof connectDB>;
+export class Question extends Base {
   QuestionModel: ReturnType<typeof questionModel>;
   constructor(props: Env) {
-    this.config = config(props);
-    this.connection = connectDB(this.config.DB_URL);
+    super(props);
     this.QuestionModel = questionModel(this.connection);
-  }
-
-  closeConnection() {
-    disconnectDB(this.connection);
   }
 
   /**
@@ -60,7 +53,7 @@ export class Question {
       if (!res) throw new Error("Didn't find any question");
       return res;
     } catch (error: any) {
-      return new Error(error.message ?? "Didn't find a question");
+      throw new Error(error.message ?? "Didn't find a question");
     }
   }
 
@@ -121,11 +114,10 @@ export class Question {
           "revenue.total": upload_cost,
         },
       });
-      disconnectDB(this.connection);
+
       return newQuestion.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to upload question");
+      throw new Error(error.message ?? "Failed to upload question");
     }
   }
 
@@ -278,11 +270,10 @@ export class Question {
           },
         });
       }
-      disconnectDB(this.connection);
+
       return question.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to review questions");
+      throw new Error(error.message ?? "Failed to review questions");
     }
   }
 
@@ -348,11 +339,10 @@ export class Question {
           "revenue.total": upload_cost,
         },
       });
-      disconnectDB(this.connection);
+
       return newQuestion.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to create new questions");
+      throw new Error(error.message ?? "Failed to create new questions");
     }
   }
 
@@ -370,11 +360,10 @@ export class Question {
         { new: true }
       );
       if (!msg) throw new Error("Failed to send message");
-      disconnectDB(this.connection);
+
       return msg.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to send message");
+      throw new Error(error.message ?? "Failed to send message");
     }
   }
 
@@ -407,11 +396,10 @@ export class Question {
           }
         }
       }
-      disconnectDB(this.connection);
+
       return res;
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to answer question");
+      throw new Error(error.message ?? "Failed to answer question");
     }
   }
 }

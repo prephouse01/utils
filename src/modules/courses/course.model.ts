@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { connectDB } from "../../utils/connectDB";
 import { ICourse as Course } from "./course.interface";
 

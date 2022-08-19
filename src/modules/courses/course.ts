@@ -14,15 +14,13 @@ import { validateOption } from "../../utils/validateOptions";
 import { config, Env } from "../../utils/config";
 import { connectDB, disconnectDB } from "../../utils/connectDB";
 import { ICourse } from "./course.interface";
+import { Base } from "../../utils/base";
 
-export class Course {
-  config: Env;
-  connection: ReturnType<typeof connectDB>;
+export class Course extends Base {
   CourseModel: ReturnType<typeof courseModel>;
 
   constructor(props: Env) {
-    this.config = config(props);
-    this.connection = connectDB(this.config.DB_URL);
+    super(props);
     this.CourseModel = courseModel(this.connection);
   }
 
@@ -41,11 +39,10 @@ export class Course {
         );
 
       const newCourse = await this.CourseModel.create(props);
-      disconnectDB(this.connection);
+
       return newCourse.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to create a new course");
+      throw new Error(error.message ?? "Failed to create a new course");
     }
   }
 
@@ -58,11 +55,10 @@ export class Course {
         { new: true }
       );
       if (!course) throw new Error("no course found");
-      disconnectDB(this.connection);
+
       return course.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error("Failed to edit this course course");
+      throw new Error("Failed to edit this course course");
     }
   }
 
@@ -72,19 +68,18 @@ export class Course {
         validateOption<DeleteCourseType>(deleteCourseSchema)(props);
       const course = await this.CourseModel.findOneAndDelete({ _id: id });
       if (!course) throw new Error("no course found");
-      disconnectDB(this.connection);
+
       return course.toJSON();
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error("Failed to delete this course");
+      throw new Error("Failed to delete this course");
     }
   }
 
-  /**
-   * @description find a course by id or course and category
-   * @param props
-   * @returns {ICourse} course
-   */
+  // /**
+  //  * @description find a course by id or course and category
+  //  * @param props
+  //  * @returns {ICourse} course
+  //  */
   async findOne(props: FindOneCourseType) {
     try {
       const { id, course, category } =
@@ -101,11 +96,10 @@ export class Course {
         throw new Error("Invalid search parameters");
       }
       if (!c) throw new Error("no course found");
-      disconnectDB(this.connection);
+
       return c;
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to fetch course");
+      throw new Error(error.message ?? "Failed to fetch course");
     }
   }
 
@@ -113,8 +107,7 @@ export class Course {
     try {
       throw new Error("Unimplemented");
     } catch (error: any) {
-      disconnectDB(this.connection);
-      return new Error(error.message ?? "Failed to find courses");
+      throw new Error(error.message ?? "Failed to find courses");
     }
   }
 }
