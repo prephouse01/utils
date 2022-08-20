@@ -40,7 +40,7 @@ export class Course extends Base {
 
       const newCourse = await this.CourseModel.create(props);
 
-      return newCourse.toJSON();
+      return newCourse;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to create a new course");
     }
@@ -95,8 +95,6 @@ export class Course extends Base {
       } else {
         throw new Error("Invalid search parameters");
       }
-      if (!c) throw new Error("no course found");
-
       return c;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to fetch course");
@@ -106,7 +104,6 @@ export class Course extends Base {
   async findMultiple() {
     try {
       const courses = await this.CourseModel.find();
-      if (!courses) throw new Error("no courses found");
       return courses;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to find courses");

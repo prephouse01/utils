@@ -56,8 +56,6 @@ class Question extends base_1.Base {
                         __v: 0,
                     });
                 }
-                if (!res)
-                    throw new Error("Didn't find any question");
                 return res;
             }
             catch (error) {

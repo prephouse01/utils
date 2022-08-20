@@ -31,12 +31,14 @@ import { Base } from "../../utils/base";
 export declare class Course extends Base {
     CourseModel: ReturnType<typeof courseModel>;
     constructor(props: Env);
-    create(props: CreateCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    edit(props: EditCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    delete(props: DeleteCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    findOne(props: FindOneCourseType): Promise<ICourse & {
+    create(props: CreateCourseType): Promise<ICourse & {
         _id: import("mongoose").Types.ObjectId;
     }>;
+    edit(props: EditCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    delete(props: DeleteCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    findOne(props: FindOneCourseType): Promise<(ICourse & {
+        _id: import("mongoose").Types.ObjectId;
+    }) | null>;
     findMultiple(): Promise<(ICourse & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;

@@ -34,7 +34,7 @@ class Course extends base_1.Base {
                 if (course)
                     throw new Error(`${data.course.toUpperCase()} already exists for ${data.category.toUpperCase()} category`);
                 const newCourse = yield this.CourseModel.create(props);
-                return newCourse.toJSON();
+                return newCourse;
             }
             catch (error) {
                 throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to create a new course");
@@ -92,8 +92,6 @@ class Course extends base_1.Base {
                 else {
                     throw new Error("Invalid search parameters");
                 }
-                if (!c)
-                    throw new Error("no course found");
                 return c;
             }
             catch (error) {
@@ -106,8 +104,6 @@ class Course extends base_1.Base {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const courses = yield this.CourseModel.find();
-                if (!courses)
-                    throw new Error("no courses found");
                 return courses;
             }
             catch (error) {

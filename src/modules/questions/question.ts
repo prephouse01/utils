@@ -52,7 +52,6 @@ export class Question extends Base {
           }
         );
       }
-      if (!res) throw new Error("Didn't find any question");
       return res;
     } catch (error: any) {
       throw new Error(error.message ?? "Didn't find a question");
