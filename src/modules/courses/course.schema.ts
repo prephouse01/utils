@@ -11,9 +11,17 @@ const course = z.object({
 
 export const createCourseSchema = course;
 
-export const editCourseSchema = course.merge(
-  z.object({ id: z.string({ required_error: "An id is required" }) })
-);
+export const editCourseSchema = z.object({
+  avatar: z.string().optional(),
+  category: category.optional(),
+  course: z.string().optional(),
+  examTypes: z
+    .string({ required_error: "An examtype is required" })
+    .array()
+    .optional(),
+  topics: z.string().array().optional(),
+  id: z.string({ required_error: "An id is required" }),
+});
 
 export const deleteCourseSchema = z.object({
   id: z.string({ required_error: "A course id is required" }),

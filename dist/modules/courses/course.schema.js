@@ -11,7 +11,17 @@ const course = zod_1.z.object({
     topics: zod_1.z.string().array(),
 });
 exports.createCourseSchema = course;
-exports.editCourseSchema = course.merge(zod_1.z.object({ id: zod_1.z.string({ required_error: "An id is required" }) }));
+exports.editCourseSchema = zod_1.z.object({
+    avatar: zod_1.z.string().optional(),
+    category: category.optional(),
+    course: zod_1.z.string().optional(),
+    examTypes: zod_1.z
+        .string({ required_error: "An examtype is required" })
+        .array()
+        .optional(),
+    topics: zod_1.z.string().array().optional(),
+    id: zod_1.z.string({ required_error: "An id is required" }),
+});
 exports.deleteCourseSchema = zod_1.z.object({
     id: zod_1.z.string({ required_error: "A course id is required" }),
 });

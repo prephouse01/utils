@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const questionBody = z.object({
+const questionBody = z.object({
   course: z.string({ required_error: "A course is required" }),
   instructions: z.string().optional(),
   examType: z.string().default("prephouse"),

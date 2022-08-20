@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.questionAnswerSchema = exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findQuestionSchema = exports.questionMessage = exports.questionBody = void 0;
+exports.questionAnswerSchema = exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findQuestionSchema = exports.questionMessage = void 0;
 const zod_1 = require("zod");
-exports.questionBody = zod_1.z.object({
+const questionBody = zod_1.z.object({
     course: zod_1.z.string({ required_error: "A course is required" }),
     instructions: zod_1.z.string().optional(),
     examType: zod_1.z.string().default("prephouse"),
@@ -27,7 +27,7 @@ exports.findQuestionSchema = zod_1.z.object({
         .or(zod_1.z.array(zod_1.z.string())),
 });
 exports.questionUploadSchema = zod_1.z.object({
-    question: exports.questionBody,
+    question: questionBody,
     uploadedBy: zod_1.z.string({ required_error: "an id is needed for uploadedBy" }),
 });
 exports.questionReviewSchema = zod_1.z.object({
@@ -37,7 +37,7 @@ exports.questionReviewSchema = zod_1.z.object({
     reviewerId: zod_1.z.string({ required_error: "a reviewer id is required" }),
 });
 exports.questionEditSchema = zod_1.z.object({
-    question: exports.questionBody,
+    question: questionBody,
     questionId: zod_1.z.string({ required_error: "A question id is required" }),
     editedBy: zod_1.z.string({ required_error: "editor id is required" }),
 });

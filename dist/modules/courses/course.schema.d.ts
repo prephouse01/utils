@@ -18,28 +18,27 @@ export declare const createCourseSchema: z.ZodObject<{
     examTypes: string[];
     topics: string[];
 }>;
-export declare const editCourseSchema: z.ZodObject<z.extendShape<{
+export declare const editCourseSchema: z.ZodObject<{
     avatar: z.ZodOptional<z.ZodString>;
-    category: z.ZodEnum<["primary", "secondary", "tertiary;"]>;
-    course: z.ZodString;
-    examTypes: z.ZodArray<z.ZodString, "many">;
-    topics: z.ZodArray<z.ZodString, "many">;
-}, {
+    category: z.ZodOptional<z.ZodEnum<["primary", "secondary", "tertiary;"]>>;
+    course: z.ZodOptional<z.ZodString>;
+    examTypes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    topics: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     id: z.ZodString;
-}>, "strip", z.ZodTypeAny, {
+}, "strip", z.ZodTypeAny, {
+    course?: string | undefined;
+    category?: "primary" | "secondary" | "tertiary;" | undefined;
+    examTypes?: string[] | undefined;
     avatar?: string | undefined;
-    course: string;
-    category: "primary" | "secondary" | "tertiary;";
+    topics?: string[] | undefined;
     id: string;
-    examTypes: string[];
-    topics: string[];
 }, {
+    course?: string | undefined;
+    category?: "primary" | "secondary" | "tertiary;" | undefined;
+    examTypes?: string[] | undefined;
     avatar?: string | undefined;
-    course: string;
-    category: "primary" | "secondary" | "tertiary;";
+    topics?: string[] | undefined;
     id: string;
-    examTypes: string[];
-    topics: string[];
 }>;
 export declare const deleteCourseSchema: z.ZodObject<{
     id: z.ZodString;
