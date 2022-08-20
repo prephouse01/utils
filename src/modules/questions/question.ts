@@ -138,6 +138,9 @@ export class Question extends Base {
 
       if (!existingQuestion) throw new Error("Question not found");
 
+      if (!existingQuestion.reviewPending)
+        throw new Error("Question is not pending review");
+
       let update = {};
 
       const upload_cost = this.config.UPLOAD_QUESTION_COST / 2;

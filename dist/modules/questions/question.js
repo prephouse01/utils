@@ -130,6 +130,8 @@ class Question extends base_1.Base {
                 const existingQuestion = yield this.QuestionModel.findById(id);
                 if (!existingQuestion)
                     throw new Error("Question not found");
+                if (!existingQuestion.reviewPending)
+                    throw new Error("Question is not pending review");
                 let update = {};
                 const upload_cost = this.config.UPLOAD_QUESTION_COST / 2;
                 const review_cost = this.config.REVIEW_QUESTION_COST / 2;
