@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findOneCourseSchema = exports.deleteCourseSchema = exports.editCourseSchema = exports.createCourseSchema = void 0;
 const zod_1 = require("zod");
-const category = zod_1.z.enum(["primary", "secondary", "tertiary;"]);
+const category = zod_1.z.enum(["primary", "secondary", "tertiary"]);
 const course = zod_1.z.object({
     avatar: zod_1.z.string().optional(),
     category: category,

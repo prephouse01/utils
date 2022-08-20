@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const category = z.enum(["primary", "secondary", "tertiary;"]);
+const category = z.enum(["primary", "secondary", "tertiary"]);
 const course = z.object({
   avatar: z.string().optional(),
   category: category,
