@@ -41,7 +41,7 @@ export const questionReviewSchema = z.object({
 
 export const questionEditSchema = z.object({
   question: body,
-  id: z.string({ required_error: "A question id is required" }),
+  questionId: z.string({ required_error: "A question id is required" }),
   editedBy: z.string({ required_error: "editor id is required" }),
 });
 

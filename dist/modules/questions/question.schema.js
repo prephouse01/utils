@@ -38,7 +38,7 @@ exports.questionReviewSchema = zod_1.z.object({
 });
 exports.questionEditSchema = zod_1.z.object({
     question: body,
-    id: zod_1.z.string({ required_error: "A question id is required" }),
+    questionId: zod_1.z.string({ required_error: "A question id is required" }),
     editedBy: zod_1.z.string({ required_error: "editor id is required" }),
 });
 exports.questionSendMessageSchema = zod_1.z.object({

@@ -246,7 +246,7 @@ class Question extends base_1.Base {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id, editedBy } = (0, validateOptions_1.validateOption)(question_schema_1.questionEditSchema)(props);
+                const { questionId, editedBy } = (0, validateOptions_1.validateOption)(question_schema_1.questionEditSchema)(props);
                 const question = (0, lodash_1.pick)(props.question, [
                     "course",
                     "instructions",
@@ -258,7 +258,7 @@ class Question extends base_1.Base {
                 ]);
                 const { answer, options } = question, rest = __rest(question, ["answer", "options"]);
                 const upload_cost = parseFloat(process.env.UPLOAD_QUESTION_COST) / 2;
-                const existingQuestion = yield this.QuestionModel.findById(id);
+                const existingQuestion = yield this.QuestionModel.findById(questionId);
                 if (!existingQuestion)
                     throw new Error("Question not found");
                 // QUESTION HAS BEEN EDITED BEFORE
@@ -271,7 +271,7 @@ class Question extends base_1.Base {
                     });
                 }
                 // if(existingQuestion.uploadedBy !== editedBy) throw new HttpException("You can't edit this question")
-                const newQuestion = yield this.QuestionModel.findByIdAndUpdate(id, Object.assign(Object.assign({}, rest), { options: options.map((option) => ({ option })), reviewPending: true, reviewed: false, lastEditedBy: editedBy }), { new: true });
+                const newQuestion = yield this.QuestionModel.findByIdAndUpdate(questionId, Object.assign(Object.assign({}, rest), { options: options.map((option) => ({ option })), reviewPending: true, reviewed: false, lastEditedBy: editedBy }), { new: true });
                 if (!newQuestion)
                     throw new Error("Failed to edit question");
                 // SET THE ANSWER
@@ -301,7 +301,7 @@ class Question extends base_1.Base {
                 }, { new: true });
                 if (!msg)
                     throw new Error("Failed to send message");
-                return msg.toJSON();
+                return msg;
             }
             catch (error) {
                 throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to send message");

@@ -114,7 +114,7 @@ export declare const questionEditSchema: z.ZodObject<{
         question: string;
         topic: string;
     }>;
-    id: z.ZodString;
+    questionId: z.ZodString;
     editedBy: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     question: {
@@ -128,7 +128,7 @@ export declare const questionEditSchema: z.ZodObject<{
         question: string;
         topic: string;
     };
-    id: string;
+    questionId: string;
     editedBy: string;
 }, {
     question: {
@@ -142,7 +142,7 @@ export declare const questionEditSchema: z.ZodObject<{
         question: string;
         topic: string;
     };
-    id: string;
+    questionId: string;
     editedBy: string;
 }>;
 export declare const questionSendMessageSchema: z.ZodObject<{

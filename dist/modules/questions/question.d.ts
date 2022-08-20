@@ -60,7 +60,9 @@ export declare class Question extends Base {
      * @returns
      */
     edit(props: QuestionEditType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    sendMessage(props: QuestionSendMessageType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    sendMessage(props: QuestionSendMessageType): Promise<import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     answer(props: QuestionAnswerType): Promise<{
         isCorrect: boolean;
         questionId: string;

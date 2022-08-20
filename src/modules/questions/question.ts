@@ -298,7 +298,7 @@ export class Question extends Base {
    */
   async edit(props: QuestionEditType) {
     try {
-      const { id, editedBy } =
+      const { questionId, editedBy } =
         validateOption<QuestionEditType>(questionEditSchema)(props);
       const question = pick(props.question, [
         "course",
@@ -312,7 +312,7 @@ export class Question extends Base {
       const { answer, options, ...rest } = question;
       const upload_cost =
         parseFloat(process.env.UPLOAD_QUESTION_COST as string) / 2;
-      const existingQuestion = await this.QuestionModel.findById(id);
+      const existingQuestion = await this.QuestionModel.findById(questionId);
 
       if (!existingQuestion) throw new Error("Question not found");
 
@@ -329,7 +329,7 @@ export class Question extends Base {
       // if(existingQuestion.uploadedBy !== editedBy) throw new HttpException("You can't edit this question")
 
       const newQuestion = await this.QuestionModel.findByIdAndUpdate(
-        id,
+        questionId,
         {
           ...rest,
           options: options.map((option) => ({ option })),
@@ -375,7 +375,7 @@ export class Question extends Base {
       );
       if (!msg) throw new Error("Failed to send message");
 
-      return msg.toJSON();
+      return msg;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to send message");
     }
