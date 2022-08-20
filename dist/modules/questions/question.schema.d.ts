@@ -1,4 +1,45 @@
 import { z } from "zod";
+export declare const questionBody: z.ZodObject<{
+    course: z.ZodString;
+    instructions: z.ZodOptional<z.ZodString>;
+    examType: z.ZodDefault<z.ZodString>;
+    category: z.ZodEnum<["primary", "secondary", "tertiary"]>;
+    answer: z.ZodNumber;
+    question: z.ZodString;
+    topic: z.ZodString;
+    year: z.ZodOptional<z.ZodString>;
+    options: z.ZodArray<z.ZodString, "many">;
+}, "strip", z.ZodTypeAny, {
+    instructions?: string | undefined;
+    year?: string | undefined;
+    course: string;
+    examType: string;
+    category: "primary" | "secondary" | "tertiary";
+    options: string[];
+    answer: number;
+    question: string;
+    topic: string;
+}, {
+    instructions?: string | undefined;
+    examType?: string | undefined;
+    year?: string | undefined;
+    course: string;
+    category: "primary" | "secondary" | "tertiary";
+    options: string[];
+    answer: number;
+    question: string;
+    topic: string;
+}>;
+export declare const questionMessage: z.ZodObject<{
+    message: z.ZodString;
+    from: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    message: string;
+    from: string;
+}, {
+    message: string;
+    from: string;
+}>;
 export declare const findQuestionSchema: z.ZodObject<{
     id: z.ZodUnion<[z.ZodString, z.ZodArray<z.ZodString, "many">]>;
 }, "strip", z.ZodTypeAny, {

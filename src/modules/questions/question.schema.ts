@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const body = z.object({
+export const questionBody = z.object({
   course: z.string({ required_error: "A course is required" }),
   instructions: z.string().optional(),
   examType: z.string().default("prephouse"),
@@ -14,7 +14,7 @@ const body = z.object({
     .min(2, { message: "There must be at least 2 options" }),
 });
 
-const questionMessage = z.object({
+export const questionMessage = z.object({
   message: z
     .string({ required_error: "A message is required" })
     .max(150, { message: "Cannot be more than 150 characters" }),
@@ -28,7 +28,7 @@ export const findQuestionSchema = z.object({
 });
 
 export const questionUploadSchema = z.object({
-  question: body,
+  question: questionBody,
   uploadedBy: z.string({ required_error: "an id is needed for uploadedBy" }),
 });
 
@@ -40,7 +40,7 @@ export const questionReviewSchema = z.object({
 });
 
 export const questionEditSchema = z.object({
-  question: body,
+  question: questionBody,
   questionId: z.string({ required_error: "A question id is required" }),
   editedBy: z.string({ required_error: "editor id is required" }),
 });
