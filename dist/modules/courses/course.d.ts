@@ -37,5 +37,7 @@ export declare class Course extends Base {
     findOne(props: FindOneCourseType): Promise<ICourse & {
         _id: import("mongoose").Types.ObjectId;
     }>;
-    findMultiple(): Promise<void>;
+    findMultiple(): Promise<(ICourse & {
+        _id: import("mongoose").Types.ObjectId;
+    })[]>;
 }

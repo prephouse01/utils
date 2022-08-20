@@ -105,7 +105,10 @@ class Course extends base_1.Base {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                throw new Error("Unimplemented");
+                const courses = yield this.CourseModel.find();
+                if (!courses)
+                    throw new Error("no courses found");
+                return courses;
             }
             catch (error) {
                 throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to find courses");

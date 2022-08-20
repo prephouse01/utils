@@ -105,7 +105,9 @@ export class Course extends Base {
 
   async findMultiple() {
     try {
-      throw new Error("Unimplemented");
+      const courses = await this.CourseModel.find();
+      if (!courses) throw new Error("no courses found");
+      return courses;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to find courses");
     }
