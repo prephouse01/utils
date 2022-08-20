@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { Admin } from "./admin.interface";
+import { connectDB } from "../../utils/connectDB";
 
 const creatorPermissions = new Schema({
   action: {
@@ -66,6 +67,10 @@ const adminSchema = new Schema<Admin>(
         default: 0,
       },
     },
+    creatorPermissions: {
+      type: [creatorPermissions],
+      default: [],
+    },
     notifications: {
       type: [Schema.Types.ObjectId],
       ref: "Notification",
@@ -89,4 +94,8 @@ const adminSchema = new Schema<Admin>(
   }
 );
 
-export const AdminModel = model<Admin>("Admin", adminSchema);
+export function adminModel(M: ReturnType<typeof connectDB>) {
+  return M.model<Admin>("Admin", adminSchema);
+}
+
+// export const AdminModel = model<Admin>("Admin", adminSchema);

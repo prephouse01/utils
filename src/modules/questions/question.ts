@@ -13,7 +13,7 @@ import {
   QuestionUploadType,
 } from "./question.schema";
 import { pick } from "lodash";
-import { AdminModel } from "../admin";
+import { adminModel } from "../admin";
 import { validateOption } from "../../utils/validateOptions";
 import { Env } from "../../utils/config";
 import { Base } from "../../utils/base";
@@ -21,9 +21,11 @@ import { questionModel } from "./question.model";
 
 export class Question extends Base {
   QuestionModel: ReturnType<typeof questionModel>;
+  AdminModel: ReturnType<typeof adminModel>;
   constructor(props: Env) {
     super(props);
     this.QuestionModel = questionModel(this.connection);
+    this.AdminModel = adminModel(this.connection);
   }
 
   /**
@@ -109,7 +111,7 @@ export class Question extends Base {
       await newQuestion.save();
 
       // CREDIT UPLOADER ACCOUNT
-      await AdminModel.findByIdAndUpdate(uploadedBy, {
+      await this.AdminModel.findByIdAndUpdate(uploadedBy, {
         $inc: {
           "revenue.total": upload_cost,
         },
@@ -178,7 +180,7 @@ export class Question extends Base {
         // IF THE QUESTION PASSES REVIEW ON FIRST GO
         if (!existingQuestion.lastEditedBy) {
           // CREDIT UPLOADER ACCOUNT
-          await AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
+          await this.AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
             $inc: {
               // "revenue.total": upload_cost,
               "revenue.total": -1 * upload_cost,
@@ -187,7 +189,7 @@ export class Question extends Base {
           });
 
           // CREDIT REVIEWER ACCOUNT
-          await AdminModel.findByIdAndUpdate(reviewerId, {
+          await this.AdminModel.findByIdAndUpdate(reviewerId, {
             $inc: {
               "revenue.withdrawable": review_cost * 2,
             },
@@ -197,14 +199,17 @@ export class Question extends Base {
         // THIS ISN'T THE FIRST TIME THE QUESTION HAS BEEN REVIEWED
         else {
           // UNCREDIT LAST REVIEWER ACCOUNT
-          await AdminModel.findByIdAndUpdate(existingQuestion.lastReviewedBy, {
-            $inc: {
-              "revenue.total": -1 * review_cost,
-            },
-          });
+          await this.AdminModel.findByIdAndUpdate(
+            existingQuestion.lastReviewedBy,
+            {
+              $inc: {
+                "revenue.total": -1 * review_cost,
+              },
+            }
+          );
 
           // CREDIT UPLOADER ACCOUNT
-          await AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
+          await this.AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
             $inc: {
               "revenue.toal": -1 * upload_cost,
               "revenue.withdrawable": upload_cost,
@@ -212,15 +217,18 @@ export class Question extends Base {
           });
 
           // CREDIT LAST EDITOR ACCOUNT
-          await AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
-            $inc: {
-              "revenue.total": -1 * upload_cost,
-              "revenue.withdrawable": upload_cost,
-            },
-          });
+          await this.AdminModel.findByIdAndUpdate(
+            existingQuestion.lastEditedBy,
+            {
+              $inc: {
+                "revenue.total": -1 * upload_cost,
+                "revenue.withdrawable": upload_cost,
+              },
+            }
+          );
 
           // CREDIT REVIEWER ACCOUNT
-          await AdminModel.findByIdAndUpdate(reviewerId, {
+          await this.AdminModel.findByIdAndUpdate(reviewerId, {
             $inc: {
               "revenue.withdrawable": review_cost,
             },
@@ -252,11 +260,14 @@ export class Question extends Base {
         // QUESTION HAS BEEN REVIEWED BEFORE
         if (existingQuestion.lastEditedBy) {
           // UNCREDIT LAST REVIEWER ACCOUNT
-          await AdminModel.findByIdAndUpdate(existingQuestion.lastReviewedBy, {
-            $inc: {
-              "revenue.total": -1 * review_cost,
-            },
-          });
+          await this.AdminModel.findByIdAndUpdate(
+            existingQuestion.lastReviewedBy,
+            {
+              $inc: {
+                "revenue.total": -1 * review_cost,
+              },
+            }
+          );
         }
 
         // SET LAST REVIEWED BY
@@ -264,7 +275,7 @@ export class Question extends Base {
         await question.save();
 
         // CREDIT REVIEWER ACCOUNT
-        await AdminModel.findByIdAndUpdate(reviewerId, {
+        await this.AdminModel.findByIdAndUpdate(reviewerId, {
           $inc: {
             "revenue.total": review_cost,
           },
@@ -305,7 +316,7 @@ export class Question extends Base {
       // QUESTION HAS BEEN EDITED BEFORE
       if (existingQuestion.lastEditedBy) {
         // UNCREDIT LAST EDITOR ACCOUNT
-        await AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
+        await this.AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
           $inc: {
             "revenue.total": -1 * upload_cost,
           },
@@ -334,7 +345,7 @@ export class Question extends Base {
       await newQuestion.save();
 
       // CREDIT EDITOR ACCOUNT
-      await AdminModel.findByIdAndUpdate(editedBy, {
+      await this.AdminModel.findByIdAndUpdate(editedBy, {
         $inc: {
           "revenue.total": upload_cost,
         },
