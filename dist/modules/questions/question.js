@@ -31,6 +31,7 @@ class Question extends base_1.Base {
     constructor(props) {
         super(props);
         this.QuestionModel = (0, question_model_1.questionModel)(this.connection);
+        this.AdminModel = (0, admin_1.adminModel)(this.connection);
     }
     /**
      *
@@ -103,7 +104,7 @@ class Question extends base_1.Base {
                 newQuestion.answer = newQuestion.options[answer]._id;
                 yield newQuestion.save();
                 // CREDIT UPLOADER ACCOUNT
-                yield admin_1.AdminModel.findByIdAndUpdate(uploadedBy, {
+                yield this.AdminModel.findByIdAndUpdate(uploadedBy, {
                     $inc: {
                         "revenue.total": upload_cost,
                     },
@@ -153,7 +154,7 @@ class Question extends base_1.Base {
                     // IF THE QUESTION PASSES REVIEW ON FIRST GO
                     if (!existingQuestion.lastEditedBy) {
                         // CREDIT UPLOADER ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
+                        yield this.AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
                             $inc: {
                                 // "revenue.total": upload_cost,
                                 "revenue.total": -1 * upload_cost,
@@ -161,7 +162,7 @@ class Question extends base_1.Base {
                             },
                         });
                         // CREDIT REVIEWER ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(reviewerId, {
+                        yield this.AdminModel.findByIdAndUpdate(reviewerId, {
                             $inc: {
                                 "revenue.withdrawable": review_cost * 2,
                             },
@@ -170,27 +171,27 @@ class Question extends base_1.Base {
                     // THIS ISN'T THE FIRST TIME THE QUESTION HAS BEEN REVIEWED
                     else {
                         // UNCREDIT LAST REVIEWER ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(existingQuestion.lastReviewedBy, {
+                        yield this.AdminModel.findByIdAndUpdate(existingQuestion.lastReviewedBy, {
                             $inc: {
                                 "revenue.total": -1 * review_cost,
                             },
                         });
                         // CREDIT UPLOADER ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
+                        yield this.AdminModel.findByIdAndUpdate(existingQuestion.uploadedBy, {
                             $inc: {
                                 "revenue.toal": -1 * upload_cost,
                                 "revenue.withdrawable": upload_cost,
                             },
                         });
                         // CREDIT LAST EDITOR ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
+                        yield this.AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
                             $inc: {
                                 "revenue.total": -1 * upload_cost,
                                 "revenue.withdrawable": upload_cost,
                             },
                         });
                         // CREDIT REVIEWER ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(reviewerId, {
+                        yield this.AdminModel.findByIdAndUpdate(reviewerId, {
                             $inc: {
                                 "revenue.withdrawable": review_cost,
                             },
@@ -211,7 +212,7 @@ class Question extends base_1.Base {
                     // QUESTION HAS BEEN REVIEWED BEFORE
                     if (existingQuestion.lastEditedBy) {
                         // UNCREDIT LAST REVIEWER ACCOUNT
-                        yield admin_1.AdminModel.findByIdAndUpdate(existingQuestion.lastReviewedBy, {
+                        yield this.AdminModel.findByIdAndUpdate(existingQuestion.lastReviewedBy, {
                             $inc: {
                                 "revenue.total": -1 * review_cost,
                             },
@@ -221,7 +222,7 @@ class Question extends base_1.Base {
                     question.lastReviewedBy = reviewerId;
                     yield question.save();
                     // CREDIT REVIEWER ACCOUNT
-                    yield admin_1.AdminModel.findByIdAndUpdate(reviewerId, {
+                    yield this.AdminModel.findByIdAndUpdate(reviewerId, {
                         $inc: {
                             "revenue.total": review_cost,
                         },
@@ -261,7 +262,7 @@ class Question extends base_1.Base {
                 // QUESTION HAS BEEN EDITED BEFORE
                 if (existingQuestion.lastEditedBy) {
                     // UNCREDIT LAST EDITOR ACCOUNT
-                    yield admin_1.AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
+                    yield this.AdminModel.findByIdAndUpdate(existingQuestion.lastEditedBy, {
                         $inc: {
                             "revenue.total": -1 * upload_cost,
                         },
@@ -276,7 +277,7 @@ class Question extends base_1.Base {
                 newQuestion.lastEditedOn = new Date();
                 yield newQuestion.save();
                 // CREDIT EDITOR ACCOUNT
-                yield admin_1.AdminModel.findByIdAndUpdate(editedBy, {
+                yield this.AdminModel.findByIdAndUpdate(editedBy, {
                     $inc: {
                         "revenue.total": upload_cost,
                     },

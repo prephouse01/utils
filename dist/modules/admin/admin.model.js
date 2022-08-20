@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminModel = void 0;
+exports.adminModel = void 0;
 const mongoose_1 = require("mongoose");
 const creatorPermissions = new mongoose_1.Schema({
     action: {
@@ -65,6 +65,10 @@ const adminSchema = new mongoose_1.Schema({
             default: 0,
         },
     },
+    creatorPermissions: {
+        type: [creatorPermissions],
+        default: [],
+    },
     notifications: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: "Notification",
@@ -85,4 +89,8 @@ const adminSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-exports.AdminModel = (0, mongoose_1.model)("Admin", adminSchema);
+function adminModel(M) {
+    return M.model("Admin", adminSchema);
+}
+exports.adminModel = adminModel;
+// export const AdminModel = model<Admin>("Admin", adminSchema);

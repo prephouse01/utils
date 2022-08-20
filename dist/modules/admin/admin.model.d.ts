@@ -24,4 +24,5 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Admin } from "./admin.interface";
-export declare const AdminModel: import("mongoose").Model<Admin, {}, {}, {}, any>;
+import { connectDB } from "../../utils/connectDB";
+export declare function adminModel(M: ReturnType<typeof connectDB>): import("mongoose").Model<Admin, {}, {}, {}, any>;

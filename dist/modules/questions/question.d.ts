@@ -24,11 +24,13 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { FindQuestionType, QuestionAnswerType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
+import { adminModel } from "../admin";
 import { Env } from "../../utils/config";
 import { Base } from "../../utils/base";
 import { questionModel } from "./question.model";
 export declare class Question extends Base {
     QuestionModel: ReturnType<typeof questionModel>;
+    AdminModel: ReturnType<typeof adminModel>;
     constructor(props: Env);
     /**
      *

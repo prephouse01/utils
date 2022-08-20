@@ -1,4 +1,11 @@
 import { Schema, Document } from "mongoose";
+import { Category } from "../courses";
+interface Permission {
+    action: "review" | "upload";
+    course: string;
+    category: Category;
+    examTypes: string[];
+}
 interface BaseAdmin {
     name: {
         first: string;
@@ -14,6 +21,7 @@ interface BaseAdmin {
         withdrawable: number;
     };
     notifications: Schema.Types.ObjectId[];
+    creatorPermissions: Permission[];
     token?: string;
     avatar?: string;
     bank?: string;
