@@ -65,27 +65,28 @@ class Question extends base_1.Base {
             }
         });
     }
-    // type FetchAllMetadata = {
-    //   query: any;
-    // };
-    // async fetchAllMetadata(props: FetchAllMetadata) {
-    //   const { query } = props;
-    //   try {
-    //     const fields = {
-    //       course: 1,
-    //       category: 1,
-    //       examType: 1,
-    //       createdAt: 1,
-    //       updatedAt: 1,
-    //       lastEditedOn: 1,
-    //       lastReviewedOn: 1,
-    //     };
-    //     let questions = this.QuestionModel.find(query, fields).lean();
-    //     return questions;
-    //   } catch (error: any) {
-    //     throw new Error(error.message ?? "Failed to fetch questions");
-    //   }
-    // }
+    fetchAllMetadata(props) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const { query } = props;
+            try {
+                const fields = {
+                    course: 1,
+                    category: 1,
+                    examType: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    lastEditedOn: 1,
+                    lastReviewedOn: 1,
+                };
+                let questions = this.QuestionModel.find(query, fields).lean();
+                return questions;
+            }
+            catch (error) {
+                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to fetch questions");
+            }
+        });
+    }
     /**
      *
      * @param props

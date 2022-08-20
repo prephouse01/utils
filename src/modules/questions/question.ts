@@ -59,29 +59,26 @@ export class Question extends Base {
     }
   }
 
-  // type FetchAllMetadata = {
-  //   query: any;
-  // };
-  // async fetchAllMetadata(props: FetchAllMetadata) {
-  //   const { query } = props;
-  //   try {
-  //     const fields = {
-  //       course: 1,
-  //       category: 1,
-  //       examType: 1,
-  //       createdAt: 1,
-  //       updatedAt: 1,
-  //       lastEditedOn: 1,
-  //       lastReviewedOn: 1,
-  //     };
+  async fetchAllMetadata(props: { query: any }) {
+    const { query } = props;
+    try {
+      const fields = {
+        course: 1,
+        category: 1,
+        examType: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        lastEditedOn: 1,
+        lastReviewedOn: 1,
+      };
 
-  //     let questions = this.QuestionModel.find(query, fields).lean();
+      let questions = this.QuestionModel.find(query, fields).lean();
 
-  //     return questions;
-  //   } catch (error: any) {
-  //     throw new Error(error.message ?? "Failed to fetch questions");
-  //   }
-  // }
+      return questions;
+    } catch (error: any) {
+      throw new Error(error.message ?? "Failed to fetch questions");
+    }
+  }
 
   /**
    *

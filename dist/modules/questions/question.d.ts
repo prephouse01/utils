@@ -42,6 +42,11 @@ export declare class Question extends Base {
     }) | (import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
+    fetchAllMetadata(props: {
+        query: any;
+    }): Promise<import("mongoose").LeanDocument<import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }>[]>;
     /**
      *
      * @param props
