@@ -52,19 +52,25 @@ export declare class Question extends Base {
      * @param props
      * @returns
      */
-    upload(props: QuestionUploadType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    upload(props: QuestionUploadType): Promise<import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     /**
      *
      * @param props
      * @returns
      */
-    review(props: QuestionReviewType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    review(props: QuestionReviewType): Promise<import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     /**
      *
      * @param props
      * @returns
      */
-    edit(props: QuestionEditType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    edit(props: QuestionEditType): Promise<import("./question.interface").IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     sendMessage(props: QuestionSendMessageType): Promise<import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
     }>;

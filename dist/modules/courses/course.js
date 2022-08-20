@@ -48,7 +48,7 @@ class Course extends base_1.Base {
                 const course = yield this.CourseModel.findOneAndUpdate({ id: props.id }, (0, lodash_1.omit)(data, ["id"]), { new: true });
                 if (!course)
                     throw new Error("no course found");
-                return course.toJSON();
+                return course;
             }
             catch (error) {
                 throw new Error("Failed to edit this course course");
@@ -62,7 +62,7 @@ class Course extends base_1.Base {
                 const course = yield this.CourseModel.findOneAndDelete({ _id: id });
                 if (!course)
                     throw new Error("no course found");
-                return course.toJSON();
+                return course;
             }
             catch (error) {
                 throw new Error("Failed to delete this course");

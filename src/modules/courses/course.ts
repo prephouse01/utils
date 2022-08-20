@@ -56,7 +56,7 @@ export class Course extends Base {
       );
       if (!course) throw new Error("no course found");
 
-      return course.toJSON();
+      return course;
     } catch (error: any) {
       throw new Error("Failed to edit this course course");
     }
@@ -69,7 +69,7 @@ export class Course extends Base {
       const course = await this.CourseModel.findOneAndDelete({ _id: id });
       if (!course) throw new Error("no course found");
 
-      return course.toJSON();
+      return course;
     } catch (error: any) {
       throw new Error("Failed to delete this course");
     }

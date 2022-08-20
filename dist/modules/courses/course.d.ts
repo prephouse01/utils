@@ -34,8 +34,12 @@ export declare class Course extends Base {
     create(props: CreateCourseType): Promise<ICourse & {
         _id: import("mongoose").Types.ObjectId;
     }>;
-    edit(props: EditCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
-    delete(props: DeleteCourseType): Promise<import("mongoose").FlattenMaps<import("mongoose").LeanDocument<any>>>;
+    edit(props: EditCourseType): Promise<ICourse & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
+    delete(props: DeleteCourseType): Promise<ICourse & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     findOne(props: FindOneCourseType): Promise<(ICourse & {
         _id: import("mongoose").Types.ObjectId;
     }) | null>;

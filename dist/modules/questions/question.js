@@ -108,7 +108,7 @@ class Question extends base_1.Base {
                         "revenue.total": upload_cost,
                     },
                 });
-                return newQuestion.toJSON();
+                return newQuestion;
             }
             catch (error) {
                 throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to upload question");
@@ -229,7 +229,7 @@ class Question extends base_1.Base {
                         },
                     });
                 }
-                return question.toJSON();
+                return question;
             }
             catch (error) {
                 throw new Error((_b = error.message) !== null && _b !== void 0 ? _b : "Failed to review questions");
@@ -283,7 +283,7 @@ class Question extends base_1.Base {
                         "revenue.total": upload_cost,
                     },
                 });
-                return newQuestion.toJSON();
+                return newQuestion;
             }
             catch (error) {
                 throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to create new questions");

@@ -113,7 +113,7 @@ export class Question extends Base {
         },
       });
 
-      return newQuestion.toJSON();
+      return newQuestion;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to upload question");
     }
@@ -281,7 +281,7 @@ export class Question extends Base {
         });
       }
 
-      return question.toJSON();
+      return question;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to review questions");
     }
@@ -350,7 +350,7 @@ export class Question extends Base {
         },
       });
 
-      return newQuestion.toJSON();
+      return newQuestion;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to create new questions");
     }
