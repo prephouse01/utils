@@ -240,6 +240,7 @@ export class Question extends Base {
       }
 
       // QUESTION FAILED REVIEW
+      // MESSAGE IS SENT HERE
       else {
         question = await this.QuestionModel.findByIdAndUpdate(
           id,
