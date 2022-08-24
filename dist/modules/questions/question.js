@@ -27,11 +27,38 @@ const admin_1 = require("../admin");
 const validateOptions_1 = require("../../utils/validateOptions");
 const base_1 = require("../../utils/base");
 const question_model_1 = require("./question.model");
+const courses_1 = require("../courses");
 class Question extends base_1.Base {
     constructor(props) {
         super(props);
         this.QuestionModel = (0, question_model_1.questionModel)(this.connection);
         this.AdminModel = (0, admin_1.adminModel)(this.connection);
+        this.CourseModel = (0, courses_1.courseModel)(this.connection);
+        this.updateQuestions();
+    }
+    updateQuestions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const questions = yield this.QuestionModel.find();
+            for (let i = 0; i < questions.length; i++) {
+                const q = questions[i];
+                try {
+                    const c = yield this.CourseModel.findOne({
+                        course: q.course,
+                        category: q.category,
+                    });
+                    if (!c) {
+                        console.error(`no course found for ${q._id}`);
+                        yield q.remove();
+                        continue;
+                    }
+                    q.course = c._id;
+                    yield q.save();
+                }
+                catch (e) {
+                    console.error(`error occured found for ${q._id}`);
+                }
+            }
+        });
     }
     /**
      *
@@ -48,13 +75,13 @@ class Question extends base_1.Base {
                     res = yield this.QuestionModel.findById(id, {
                         _id: 0,
                         __v: 0,
-                    });
+                    }).populate("course");
                 }
                 else if (Array.isArray(id)) {
                     res = yield this.QuestionModel.find({ _id: { $in: id } }, {
                         _id: 0,
                         __v: 0,
-                    });
+                    }).populate("course");
                 }
                 return res;
             }
@@ -95,6 +122,9 @@ class Question extends base_1.Base {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { question, uploadedBy } = (0, validateOptions_1.validateOption)(question_schema_1.questionUploadSchema)(props);
+                const course = yield this.CourseModel.findById(question.course);
+                if (!course)
+                    throw new Error("This course dosen't exist");
                 const { answer } = question, rest = __rest(question, ["answer"]);
                 const upload_cost = this.config.UPLOAD_QUESTION_COST / 2;
                 // UPLOAD QUESTION
@@ -203,6 +233,7 @@ class Question extends base_1.Base {
                     yield question.save();
                 }
                 // QUESTION FAILED REVIEW
+                // MESSAGE IS SENT HERE
                 else {
                     question = yield this.QuestionModel.findByIdAndUpdate(id, {
                         $set: Object.assign({ reviewPending: false, reviewed: false, lastReviewedOn: new Date() }, update),

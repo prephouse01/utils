@@ -14,10 +14,9 @@ function questionModel(M) {
     });
     const questionSchema = new mongoose_1.Schema({
         course: {
-            type: String,
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Course",
             required: true,
-            trim: true,
-            lowercase: true,
         },
         instruction: {
             type: String,

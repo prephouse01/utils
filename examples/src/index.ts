@@ -44,28 +44,28 @@ async function ops() {
   //   });
 
   // find question
-  // await question
-  //   .find({
-  //     id: ["62b4afe6e54bc2cafddf9cd0", "62b4b085e54bc2cafddf9cdd"],
-  //   })
-  //   .then((q) => console.log(q))
-  //   .catch((e: any) => console.log(e.message));
-
   await question
-    .upload({
-      question: {
-        course: "english language",
-        category: "primary",
-        examType: "federal",
-        answer: 1,
-        question: "What is the first letter of the alphabet",
-        options: ["A", "B"],
-        topic: "alphabets",
-      },
-      uploadedBy: "62b0b4fa8e4e76578ca97393",
+    .find({
+      id: "63060abbd545e75c65392c2d",
     })
     .then((q) => console.log(q))
-    .catch((e) => console.log(e.message));
+    .catch((e: any) => console.log(e.message));
+
+  // await question
+  //   .upload({
+  //     question: {
+  //       course: "62b09b5d8eab8da481309869",
+  //       category: "primary",
+  //       examType: "federal",
+  //       answer: 1,
+  //       question: "What is the first letter of the alphabet",
+  //       options: ["A", "B"],
+  //       topic: "alphabets",
+  //     },
+  //     uploadedBy: "62b0b4fa8e4e76578ca97393",
+  //   })
+  //   .then((q) => console.log(q))
+  //   .catch((e) => console.log(e.message));
 }
 
 ops();

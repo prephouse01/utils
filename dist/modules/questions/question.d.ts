@@ -28,10 +28,13 @@ import { adminModel } from "../admin";
 import { Env } from "../../utils/config";
 import { Base } from "../../utils/base";
 import { questionModel } from "./question.model";
+import { courseModel } from "../courses";
 export declare class Question extends Base {
     QuestionModel: ReturnType<typeof questionModel>;
     AdminModel: ReturnType<typeof adminModel>;
+    CourseModel: ReturnType<typeof courseModel>;
     constructor(props: Env);
+    updateQuestions(): Promise<void>;
     /**
      *
      * @param props
@@ -39,9 +42,9 @@ export declare class Question extends Base {
      */
     find(props: FindQuestionType): Promise<(import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
-    }) | (import("./question.interface").IQuestion & {
+    }) | Omit<import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
-    })[] | null | undefined>;
+    }, never>[] | null | undefined>;
     fetchAllMetadata(props: {
         query: any;
     }): Promise<import("mongoose").LeanDocument<import("./question.interface").IQuestion & {

@@ -19,10 +19,9 @@ export function questionModel(M: ReturnType<typeof connectDB>) {
   const questionSchema = new Schema<Question>(
     {
       course: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "Course",
         required: true,
-        trim: true,
-        lowercase: true,
       },
       instruction: {
         type: String,

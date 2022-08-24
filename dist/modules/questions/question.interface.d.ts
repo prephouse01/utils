@@ -1,4 +1,5 @@
 import { Document, Schema } from "mongoose";
+import { ICourse } from "../courses";
 interface option extends Document {
     option: string;
 }
@@ -12,7 +13,7 @@ interface Message extends Document {
     from: string;
 }
 interface BaseQuestion {
-    course: string;
+    course: ICourse;
     instruction?: string;
     examType?: string;
     category: string;

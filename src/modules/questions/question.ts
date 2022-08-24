@@ -18,14 +18,41 @@ import { validateOption } from "../../utils/validateOptions";
 import { Env } from "../../utils/config";
 import { Base } from "../../utils/base";
 import { questionModel } from "./question.model";
+import { courseModel } from "../courses";
 
 export class Question extends Base {
   QuestionModel: ReturnType<typeof questionModel>;
   AdminModel: ReturnType<typeof adminModel>;
+  CourseModel: ReturnType<typeof courseModel>;
   constructor(props: Env) {
     super(props);
     this.QuestionModel = questionModel(this.connection);
     this.AdminModel = adminModel(this.connection);
+    this.CourseModel = courseModel(this.connection);
+
+    this.updateQuestions();
+  }
+
+  async updateQuestions() {
+    const questions = await this.QuestionModel.find();
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      try {
+        const c = await this.CourseModel.findOne({
+          course: q.course,
+          category: q.category,
+        });
+        if (!c) {
+          console.error(`no course found for ${q._id}`);
+          await q.remove();
+          continue;
+        }
+        q.course = c._id;
+        await q.save();
+      } catch (e: any) {
+        console.error(`error occured found for ${q._id}`);
+      }
+    }
   }
 
   /**
@@ -42,7 +69,7 @@ export class Question extends Base {
         res = await this.QuestionModel.findById(id, {
           _id: 0,
           __v: 0,
-        });
+        }).populate("course");
       } else if (Array.isArray(id)) {
         res = await this.QuestionModel.find(
           { _id: { $in: id } },
@@ -50,7 +77,7 @@ export class Question extends Base {
             _id: 0,
             __v: 0,
           }
-        );
+        ).populate("course");
       }
       return res;
     } catch (error: any) {
@@ -88,6 +115,9 @@ export class Question extends Base {
     try {
       const { question, uploadedBy } =
         validateOption<QuestionUploadType>(questionUploadSchema)(props);
+
+      const course = await this.CourseModel.findById(question.course);
+      if (!course) throw new Error("This course dosen't exist");
 
       const { answer, ...rest } = question;
 
