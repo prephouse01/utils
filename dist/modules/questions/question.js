@@ -104,7 +104,7 @@ class Question extends base_1.Base {
                     lastEditedOn: 1,
                     lastReviewedOn: 1,
                 };
-                let questions = this.QuestionModel.find(query, fields).populate("Course").lean();
+                let questions = this.QuestionModel.find(query, fields).populate("course").lean();
                 return questions;
             }
             catch (error) {
