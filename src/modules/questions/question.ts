@@ -98,7 +98,7 @@ export class Question extends Base {
         lastReviewedOn: 1,
       };
 
-      let questions = this.QuestionModel.find(query, fields).lean();
+      let questions = this.QuestionModel.find(query, fields).populate("Course").lean();
 
       return questions;
     } catch (error: any) {

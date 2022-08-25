@@ -47,9 +47,9 @@ export declare class Question extends Base {
     }, never>[] | null | undefined>;
     fetchAllMetadata(props: {
         query: any;
-    }): Promise<import("mongoose").LeanDocument<import("./question.interface").IQuestion & {
+    }): Promise<import("mongoose").LeanDocument<Omit<import("./question.interface").IQuestion & {
         _id: import("mongoose").Types.ObjectId;
-    }>[]>;
+    }, never>>[]>;
     /**
      *
      * @param props
