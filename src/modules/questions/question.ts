@@ -30,30 +30,30 @@ export class Question extends Base {
     this.AdminModel = adminModel(this.connection);
     this.CourseModel = courseModel(this.connection);
 
-    this.updateQuestions();
+    // this.updateQuestions();
   }
 
-  async updateQuestions() {
-    const questions = await this.QuestionModel.find();
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      try {
-        const c = await this.CourseModel.findOne({
-          course: q.course,
-          category: q.category,
-        });
-        if (!c) {
-          console.error(`no course found for ${q._id}`);
-          await q.remove();
-          continue;
-        }
-        q.course = c._id;
-        await q.save();
-      } catch (e: any) {
-        console.error(`error occured found for ${q._id}`);
-      }
-    }
-  }
+  // async updateQuestions() {
+  //   const questions = await this.QuestionModel.find();
+  //   for (let i = 0; i < questions.length; i++) {
+  //     const q = questions[i];
+  //     try {
+  //       const c = await this.CourseModel.findOne({
+  //         course: q.course,
+  //         category: q.category,
+  //       });
+  //       if (!c) {
+  //         console.error(`no course found for ${q._id}`);
+  //         await q.remove();
+  //         continue;
+  //       }
+  //       q.course = c._id;
+  //       await q.save();
+  //     } catch (e: any) {
+  //       console.error(`error occured found for ${q._id}`);
+  //     }
+  //   }
+  // }
 
   /**
    *

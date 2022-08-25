@@ -34,21 +34,32 @@ export declare class Question extends Base {
     AdminModel: ReturnType<typeof adminModel>;
     CourseModel: ReturnType<typeof courseModel>;
     constructor(props: Env);
-    updateQuestions(): Promise<void>;
     /**
      *
      * @param props
      * @returns
      */
     find(props: FindQuestionType): Promise<(import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }) | Omit<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }, never>[] | null | undefined>;
     fetchAllMetadata(props: {
         query: any;
     }): Promise<import("mongoose").LeanDocument<Omit<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }, never>>[]>;
     /**
      *
@@ -56,7 +67,11 @@ export declare class Question extends Base {
      * @returns
      */
     upload(props: QuestionUploadType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }>;
     /**
      *
@@ -64,7 +79,11 @@ export declare class Question extends Base {
      * @returns
      */
     review(props: QuestionReviewType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }>;
     /**
      *
@@ -72,10 +91,18 @@ export declare class Question extends Base {
      * @returns
      */
     edit(props: QuestionEditType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }>;
     sendMessage(props: QuestionSendMessageType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: import("mongoose").Types.ObjectId; /**
+         *
+         * @param props
+         * @returns
+         */
     }>;
     answer(props: QuestionAnswerType): Promise<{
         isCorrect: boolean;

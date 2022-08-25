@@ -34,32 +34,29 @@ class Question extends base_1.Base {
         this.QuestionModel = (0, question_model_1.questionModel)(this.connection);
         this.AdminModel = (0, admin_1.adminModel)(this.connection);
         this.CourseModel = (0, courses_1.courseModel)(this.connection);
-        this.updateQuestions();
+        // this.updateQuestions();
     }
-    updateQuestions() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const questions = yield this.QuestionModel.find();
-            for (let i = 0; i < questions.length; i++) {
-                const q = questions[i];
-                try {
-                    const c = yield this.CourseModel.findOne({
-                        course: q.course,
-                        category: q.category,
-                    });
-                    if (!c) {
-                        console.error(`no course found for ${q._id}`);
-                        yield q.remove();
-                        continue;
-                    }
-                    q.course = c._id;
-                    yield q.save();
-                }
-                catch (e) {
-                    console.error(`error occured found for ${q._id}`);
-                }
-            }
-        });
-    }
+    // async updateQuestions() {
+    //   const questions = await this.QuestionModel.find();
+    //   for (let i = 0; i < questions.length; i++) {
+    //     const q = questions[i];
+    //     try {
+    //       const c = await this.CourseModel.findOne({
+    //         course: q.course,
+    //         category: q.category,
+    //       });
+    //       if (!c) {
+    //         console.error(`no course found for ${q._id}`);
+    //         await q.remove();
+    //         continue;
+    //       }
+    //       q.course = c._id;
+    //       await q.save();
+    //     } catch (e: any) {
+    //       console.error(`error occured found for ${q._id}`);
+    //     }
+    //   }
+    // }
     /**
      *
      * @param props
