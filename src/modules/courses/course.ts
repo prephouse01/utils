@@ -82,8 +82,10 @@ export class Course extends Base {
   //  */
   async findOne(props: FindOneCourseType) {
     try {
-      const { id, course, category } =
-        validateOption<FindOneCourseType>(findOneCourseSchema)(props);
+      const { id, course, category } = validateOption<
+        FindOneCourseType,
+        typeof findOneCourseSchema
+      >(findOneCourseSchema)(props);
       let c;
       if (id) {
         c = await this.CourseModel.findById(id);
