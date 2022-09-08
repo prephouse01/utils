@@ -23,12 +23,13 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { FindQuestionType, QuestionAnswerType, QuestionEditType, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
+import { FindQuestionType, QuestionAnswerType, QuestionEditType, QuestionGenerate, QuestionReviewType, QuestionSendMessageType, QuestionUploadType } from "./question.schema";
 import { adminModel } from "../admin";
 import { Env } from "../../utils/config";
 import { Base } from "../../utils/base";
 import { questionModel } from "./question.model";
 import { courseModel } from "../courses";
+import { IQuestion } from "./question.interface";
 export declare class Question extends Base {
     QuestionModel: ReturnType<typeof questionModel>;
     AdminModel: ReturnType<typeof adminModel>;
@@ -39,74 +40,52 @@ export declare class Question extends Base {
      * @param props
      * @returns
      */
-    find(props: FindQuestionType): Promise<(import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
-    }) | Omit<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
+    find(props: FindQuestionType): Promise<(IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
+    }) | Omit<IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
     }, never>[] | null | undefined>;
     fetchAllMetadata(props: {
         query: any;
-    }): Promise<import("mongoose").LeanDocument<Omit<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
+    }): Promise<import("mongoose").LeanDocument<Omit<IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
     }, never>>[]>;
     /**
      *
      * @param props
      * @returns
      */
-    upload(props: QuestionUploadType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
+    upload(props: QuestionUploadType): Promise<IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
     }>;
     /**
      *
      * @param props
      * @returns
      */
-    review(props: QuestionReviewType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
+    review(props: QuestionReviewType): Promise<IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
     }>;
     /**
      *
      * @param props
      * @returns
      */
-    edit(props: QuestionEditType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
+    edit(props: QuestionEditType): Promise<IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
     }>;
-    sendMessage(props: QuestionSendMessageType): Promise<import("./question.interface").IQuestion & {
-        _id: import("mongoose").Types.ObjectId; /**
-         *
-         * @param props
-         * @returns
-         */
+    sendMessage(props: QuestionSendMessageType): Promise<IQuestion & {
+        _id: import("mongoose").Types.ObjectId;
     }>;
     answer(props: QuestionAnswerType): Promise<{
-        isCorrect: boolean;
-        questionId: string;
-        answerId: number;
-    }[]>;
+        answers: {
+            isCorrect: boolean;
+            questionId: string;
+            answerId: string;
+        }[];
+        passed: number;
+        failed: number;
+        invalidAnswers: number;
+    }>;
+    generate({ difficulty, noOfQuestions, ...props }: QuestionGenerate): Promise<Pick<IQuestion, "course" | "examType" | "category" | "options" | "question" | "topic" | "_id" | "instruction">[]>;
 }

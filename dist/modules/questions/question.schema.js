@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.questionAnswerSchema = exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findQuestionSchema = exports.questionMessage = void 0;
+exports.questionGenerateSchema = exports.questionAnswerSchema = exports.questionFetchMetadataSchema = exports.questionSendMessageSchema = exports.questionEditSchema = exports.questionReviewSchema = exports.questionUploadSchema = exports.findQuestionSchema = exports.questionMessage = void 0;
 const zod_1 = require("zod");
 const questionBody = zod_1.z.object({
     course: zod_1.z.string({ required_error: "A course is required" }),
@@ -25,6 +25,8 @@ exports.findQuestionSchema = zod_1.z.object({
     id: zod_1.z
         .string({ required_error: "a question id is required" })
         .or(zod_1.z.array(zod_1.z.string())),
+    projection: zod_1.z.object({}).default({}).optional(),
+    select: zod_1.z.string().optional(),
 });
 exports.questionUploadSchema = zod_1.z.object({
     question: questionBody,
@@ -54,8 +56,14 @@ exports.questionFetchMetadataSchema = zod_1.z.object({
 });
 const answer = zod_1.z.object({
     questionId: zod_1.z.string({ required_error: "a question id is required" }),
-    answerId: zod_1.z.number({ required_error: "an answer is required" }),
+    answerId: zod_1.z.string({ required_error: "an answer is required" }),
 });
 exports.questionAnswerSchema = zod_1.z.object({
     answers: zod_1.z.array(answer),
+});
+exports.questionGenerateSchema = zod_1.z.object({
+    course: zod_1.z.string(),
+    difficulty: zod_1.z.number().optional(),
+    examType: zod_1.z.string().optional(),
+    noOfQuestions: zod_1.z.number().min(1),
 });

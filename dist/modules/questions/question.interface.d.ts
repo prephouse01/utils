@@ -6,7 +6,7 @@ interface option extends Document {
 interface QuestionStats {
     passed: number;
     failed: number;
-    difficulty: string;
+    difficulty: number;
 }
 interface Message extends Document {
     message: string;

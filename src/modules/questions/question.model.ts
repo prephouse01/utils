@@ -68,8 +68,8 @@ export function questionModel(M: ReturnType<typeof connectDB>) {
           default: 0,
         },
         difficulty: {
-          type: String,
-          default: "",
+          type: Number,
+          default: 1,
         },
       },
       messages: {

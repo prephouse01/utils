@@ -32,5 +32,5 @@ export function courseModel(M: ReturnType<typeof connectDB>) {
     },
   });
 
-  return M.model("Course", courseSchema);
+  return M.model<Course>("Course", courseSchema);
 }

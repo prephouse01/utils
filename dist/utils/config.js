@@ -8,6 +8,7 @@ const env_schema_1 = __importDefault(require("env-schema"));
 function config(data) {
     const schema = {
         title: "config",
+        type: "object",
         description: "test environment variables",
         properties: {
             DB_URL: {

@@ -31,19 +31,19 @@ import { Base } from "../../utils/base";
 export declare class Course extends Base {
     CourseModel: ReturnType<typeof courseModel>;
     constructor(props: Env);
-    create(props: CreateCourseType): Promise<ICourse & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
-    edit(props: EditCourseType): Promise<ICourse & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
-    delete(props: DeleteCourseType): Promise<ICourse & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
-    findOne(props: FindOneCourseType): Promise<(ICourse & {
-        _id: import("mongoose").Types.ObjectId;
-    }) | null>;
-    findMultiple(): Promise<(ICourse & {
-        _id: import("mongoose").Types.ObjectId;
-    })[]>;
+    create(props: CreateCourseType): Promise<import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }>>;
+    edit(props: EditCourseType): Promise<import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }>>;
+    delete(props: DeleteCourseType): Promise<import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }>>;
+    findOne(props: FindOneCourseType): Promise<(import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }>) | null>;
+    findMultiple(): Promise<(import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
+        _id: import("mongoose").Schema.Types.ObjectId;
+    }>)[]>;
 }

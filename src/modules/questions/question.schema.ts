@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, string, z } from "zod";
 
 const questionBody = z.object({
   course: z.string({ required_error: "A course is required" }),
@@ -25,6 +25,8 @@ export const findQuestionSchema = z.object({
   id: z
     .string({ required_error: "a question id is required" })
     .or(z.array(z.string())),
+  projection: z.object({}).default({}).optional(),
+  select: z.string().optional(),
 });
 
 export const questionUploadSchema = z.object({
@@ -60,11 +62,18 @@ export const questionFetchMetadataSchema = z.object({
 
 const answer = z.object({
   questionId: z.string({ required_error: "a question id is required" }),
-  answerId: z.number({ required_error: "an answer is required" }),
+  answerId: z.string({ required_error: "an answer is required" }),
 });
 
 export const questionAnswerSchema = z.object({
   answers: z.array(answer),
+});
+
+export const questionGenerateSchema = z.object({
+  course: z.string(),
+  difficulty: z.number().optional(),
+  examType: z.string().optional(),
+  noOfQuestions: z.number().min(1),
 });
 
 export type FindQuestionType = z.infer<typeof findQuestionSchema>;
@@ -76,3 +85,4 @@ export type QuestionFetchMetadataType = z.infer<
   typeof questionFetchMetadataSchema
 >;
 export type QuestionAnswerType = z.infer<typeof questionAnswerSchema>;
+export type QuestionGenerate = z.infer<typeof questionGenerateSchema>;

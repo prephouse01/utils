@@ -63,8 +63,8 @@ function questionModel(M) {
                 default: 0,
             },
             difficulty: {
-                type: String,
-                default: "",
+                type: Number,
+                default: 1,
             },
         },
         messages: {

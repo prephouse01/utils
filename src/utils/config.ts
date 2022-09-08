@@ -9,6 +9,7 @@ export type Env = {
 export function config(data: Env) {
   const schema = {
     title: "config",
+    type: "object",
     description: "test environment variables",
     properties: {
       DB_URL: {

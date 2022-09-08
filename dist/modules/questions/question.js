@@ -37,25 +37,31 @@ class Question extends base_1.Base {
         // this.updateQuestions();
     }
     // async updateQuestions() {
-    //   const questions = await this.QuestionModel.find();
-    //   for (let i = 0; i < questions.length; i++) {
-    //     const q = questions[i];
-    //     try {
-    //       const c = await this.CourseModel.findOne({
-    //         course: q.course,
-    //         category: q.category,
-    //       });
-    //       if (!c) {
-    //         console.error(`no course found for ${q._id}`);
-    //         await q.remove();
-    //         continue;
-    //       }
-    //       q.course = c._id;
-    //       await q.save();
-    //     } catch (e: any) {
-    //       console.error(`error occured found for ${q._id}`);
+    //   await this.QuestionModel.updateMany(
+    //     {},
+    //     {
+    //       // $set: { "stats.difficulty": 0 },
+    //       $unset: { difficulty: "" },
     //     }
-    //   }
+    //   );
+    //   // for (let i = 0; i < questions.length; i++) {
+    //   //   const q = questions[i];
+    //   //   try {
+    //   //     const c = await this.CourseModel.findOne({
+    //   //       course: q.course,
+    //   //       category: q.category,
+    //   //     });
+    //   //     if (!c) {
+    //   //       console.error(`no course found for ${q._id}`);
+    //   //       await q.remove();
+    //   //       continue;
+    //   //     }
+    //   //     q.course = c._id;
+    //   //     await q.save();
+    //   //   } catch (e: any) {
+    //   //     console.error(`error occured found for ${q._id}`);
+    //   //   }
+    //   // }
     // }
     /**
      *
@@ -66,19 +72,13 @@ class Question extends base_1.Base {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = (0, validateOptions_1.validateOption)(question_schema_1.findQuestionSchema)(props);
+                const { id, select = "" } = (0, validateOptions_1.validateOption)(question_schema_1.findQuestionSchema)(props);
                 let res;
                 if (typeof id === "string") {
-                    res = yield this.QuestionModel.findById(id, {
-                        _id: 0,
-                        __v: 0,
-                    }).populate("course");
+                    res = yield this.QuestionModel.findById(id, Object.assign({}, props.projection)).populate({ path: "course", select });
                 }
                 else if (Array.isArray(id)) {
-                    res = yield this.QuestionModel.find({ _id: { $in: id } }, {
-                        _id: 0,
-                        __v: 0,
-                    }).populate("course");
+                    res = yield this.QuestionModel.find({ _id: { $in: id } }, Object.assign({}, props.projection)).populate("Course", { path: "course", select });
                 }
                 return res;
             }
@@ -101,7 +101,9 @@ class Question extends base_1.Base {
                     lastEditedOn: 1,
                     lastReviewedOn: 1,
                 };
-                let questions = this.QuestionModel.find(query, fields).populate("course").lean();
+                let questions = this.QuestionModel.find(query, fields)
+                    .populate("course")
+                    .lean();
                 return questions;
             }
             catch (error) {
@@ -336,39 +338,199 @@ class Question extends base_1.Base {
         });
     }
     answer(props) {
-        var _a;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { answers } = (0, validateOptions_1.validateOption)(question_schema_1.questionAnswerSchema)(props);
                 let res = [];
-                if (Array.isArray(answers)) {
-                    for (let i = 0; i < answers.length; i++) {
-                        const { questionId, answerId } = answers[i];
-                        const question = yield this.QuestionModel.findById(questionId);
-                        if (!question)
-                            throw new Error("Question not found");
-                        const isCorrect = question.answer.toString() === answerId.toString();
-                        res.push(Object.assign(Object.assign({}, answers[i]), { isCorrect }));
-                        if (isCorrect) {
-                            yield this.QuestionModel.findByIdAndUpdate(questionId, {
-                                $inc: {
-                                    "stats.passed": 1,
-                                },
-                            });
-                        }
-                        else {
-                            yield this.QuestionModel.findByIdAndUpdate(questionId, {
-                                $inc: {
-                                    "stats.failed": 1,
-                                },
-                            });
-                        }
+                let passed = 0;
+                let failed = 0;
+                let invalidAnswers = 0;
+                if (!Array.isArray(answers))
+                    throw new Error("Invalid input");
+                for (let i = 0; i < answers.length; i++) {
+                    const { questionId, answerId } = answers[i];
+                    const question = yield this.QuestionModel.findById(questionId);
+                    if (!question)
+                        throw new Error("Question not found");
+                    // check if answerid is part of the options
+                    const opts = question.options.filter((opt) => opt._id.toString() === answerId.toString());
+                    if (opts.length === 0) {
+                        invalidAnswers++;
+                        continue;
+                    }
+                    const isCorrect = question.answer.toString() === answerId.toString();
+                    res.push(Object.assign(Object.assign({}, answers[i]), { isCorrect }));
+                    /**
+                     * difficulty starts counting once a question has been answered more than 100 times.
+                     *
+                     * we calculate the difficulty with the difficulty index.
+                     * i.e difficulty = passed / total
+                     *
+                     * 0.00 - 0.20 = very difficult
+                     * 0.21 - 0.80 = moderately difficult
+                     * 0.81 - 1.00 = very easy
+                     */
+                    const total = ((_b = (_a = question.stats) === null || _a === void 0 ? void 0 : _a.passed) !== null && _b !== void 0 ? _b : 0) + ((_d = (_c = question.stats) === null || _c === void 0 ? void 0 : _c.failed) !== null && _d !== void 0 ? _d : 0) + 1;
+                    if (isCorrect) {
+                        const diff = ((((_f = (_e = question.stats) === null || _e === void 0 ? void 0 : _e.passed) !== null && _f !== void 0 ? _f : 0) + 1) / total).toFixed(2);
+                        yield this.QuestionModel.findByIdAndUpdate(questionId, {
+                            $inc: {
+                                "stats.passed": 1,
+                            },
+                            "stats.difficulty": total > 100 ? diff : 1,
+                        });
+                        passed++;
+                    }
+                    else {
+                        const diff = (((_h = (_g = question.stats) === null || _g === void 0 ? void 0 : _g.passed) !== null && _h !== void 0 ? _h : 0) / total).toFixed(2);
+                        yield this.QuestionModel.findByIdAndUpdate(questionId, {
+                            $inc: {
+                                "stats.failed": 1,
+                            },
+                            "stats.difficulty": total > 100 ? diff : 1,
+                        });
+                        failed++;
                     }
                 }
-                return res;
+                return { answers: res, passed, failed, invalidAnswers };
             }
             catch (error) {
-                throw new Error((_a = error.message) !== null && _a !== void 0 ? _a : "Failed to answer question");
+                throw new Error((_j = error.message) !== null && _j !== void 0 ? _j : "Failed to answer question");
+            }
+        });
+    }
+    generate(_a) {
+        var _b;
+        var { difficulty = 70, noOfQuestions } = _a, props = __rest(_a, ["difficulty", "noOfQuestions"]);
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const params = Object.assign(Object.assign({}, props), { difficulty });
+                let course = yield this.CourseModel.findById(params.course);
+                if (!course)
+                    throw new Error("No course found");
+                const keys = Object.keys(params);
+                //@ts-ignore
+                let match = {
+                // course: props.course,
+                // noOfQuestions: props.noOfQuestions,
+                // difficulty: props.difficulty,
+                // examType: props.examType,
+                };
+                for (let i = 0; i < keys.length; i++) {
+                    if (keys[i] === "course") {
+                        match.course = { $eq: course._id };
+                        continue;
+                    }
+                    if (keys[i] === "difficulty") {
+                        match.difficulty = { $eq: params[keys[i]] };
+                        continue;
+                    }
+                    match[keys[i]] = { $eq: params[keys[i]] };
+                }
+                // monitor while loop
+                let lap = 1;
+                /**
+                 *
+                 *
+                 * STEP 1: fetch with the query the user provided
+                 * STEP 2: fetch with a lower difficulty
+                 * STEP 3: fetch with the other examTypes with a difficulty less than or equal to
+                 *         the current difficulty
+                 * STEP 4: fetch with other courses in the same category with a difficulty lower
+                 *         or equal to the current difficulty
+                 *
+                 *
+                 */
+                const project = {
+                    instruction: 1,
+                    _id: 1,
+                    course: 1,
+                    examType: 1,
+                    category: 1,
+                    question: 1,
+                    topic: 1,
+                    options: 1,
+                };
+                let questions = [];
+                let parsedCourses = [course._id];
+                // run the while loop a maximum of 5 times
+                while (questions.length < noOfQuestions || lap > 5) {
+                    if (!course)
+                        break;
+                    let activeCourse = course;
+                    if (lap > 1) {
+                        const courses = yield this.CourseModel.aggregate([
+                            {
+                                $match: {
+                                    _id: { $nin: parsedCourses },
+                                    category: course.category,
+                                },
+                            },
+                            { $sample: { size: 1 } },
+                        ]).exec();
+                        if (courses.length === 0)
+                            break;
+                        // @ts-ignore
+                        activeCourse = courses[0];
+                        parsedCourses.push(activeCourse._id);
+                        match.course = activeCourse._id;
+                    }
+                    // $expr{
+                    //   $ne: ["$_id", { $toObjectId: course._id }],
+                    // }
+                    let matchs = [];
+                    for (let i = 0; i < keys.length; i++) {
+                        if (i === 0) {
+                            const { course: c, difficulty } = match, others = __rest(match, ["course", "difficulty"]);
+                            matchs.push(Object.assign(Object.assign({}, others), { "stats.difficulty": { $eq: params.difficulty }, $expr: {
+                                    $eq: ["$course", { $toObjectId: activeCourse._id }],
+                                } }));
+                            continue;
+                        }
+                        if (i === 1) {
+                            const { course: c, difficulty } = match, others = __rest(match, ["course", "difficulty"]);
+                            matchs.push(Object.assign(Object.assign({}, others), { "stats.difficulty": { $lt: params.difficulty }, $expr: {
+                                    $eq: ["$course", { $toObjectId: activeCourse._id }],
+                                } }));
+                            continue;
+                        }
+                        if (i === 2 && keys.includes("examType")) {
+                            const { course: c, difficulty } = match, others = __rest(match, ["course", "difficulty"]);
+                            const cat = activeCourse.examTypes.filter(
+                            // @ts-ignore
+                            (c) => c !== params["examType"]);
+                            matchs.push({
+                                examType: { $in: cat },
+                                "stats.difficulty": { $lte: params.difficulty },
+                                $expr: {
+                                    $eq: ["$course", { $toObjectId: activeCourse._id }],
+                                },
+                            });
+                            continue;
+                        }
+                    }
+                    const quests = yield Promise.all(matchs.map((x) => this.QuestionModel.aggregate([
+                        {
+                            $match: x,
+                        },
+                        { $project: project },
+                        { $sample: { size: noOfQuestions - questions.length } },
+                    ]).exec()));
+                    quests.forEach((q) => {
+                        questions = questions.concat(q);
+                    });
+                    questions = questions.slice(0, noOfQuestions);
+                    yield this.QuestionModel.populate(questions, {
+                        path: "course",
+                        select: "avatar course category",
+                    });
+                    lap++;
+                }
+                return questions;
+            }
+            catch (error) {
+                throw new Error((_b = error.message) !== null && _b !== void 0 ? _b : "Failed to generate question");
             }
         });
     }
