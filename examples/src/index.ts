@@ -62,10 +62,10 @@ async function ops() {
   // await question
   //   .find({
   //     id: "6307791e8ae767b1fc3fb6ec",
-  //     projection: {
-  //       stats: 1,
-  //       // options: 0,
-  //     },
+  //     // projection: {
+  //     //   stats: 1,
+  //     //   options: 0,
+  //     // },
   //     // select: "topics",
   //   })
   //   .then((q) => console.log(q))

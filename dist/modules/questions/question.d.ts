@@ -42,9 +42,9 @@ export declare class Question extends Base {
      */
     find(props: FindQuestionType): Promise<(IQuestion & {
         _id: import("mongoose").Types.ObjectId;
-    }) | Omit<IQuestion & {
+    }) | (IQuestion & {
         _id: import("mongoose").Types.ObjectId;
-    }, never>[] | null | undefined>;
+    })[] | null | undefined>;
     fetchAllMetadata(props: {
         query: any;
     }): Promise<import("mongoose").LeanDocument<Omit<IQuestion & {

@@ -75,10 +75,12 @@ class Question extends base_1.Base {
                 const { id, select = "" } = (0, validateOptions_1.validateOption)(question_schema_1.findQuestionSchema)(props);
                 let res;
                 if (typeof id === "string") {
-                    res = yield this.QuestionModel.findById(id, Object.assign({}, props.projection)).populate({ path: "course", select });
+                    res = yield this.QuestionModel.findById(id, Object.assign({}, props.projection));
+                    yield this.QuestionModel.populate(res, { path: "course", select });
                 }
                 else if (Array.isArray(id)) {
-                    res = yield this.QuestionModel.find({ _id: { $in: id } }, Object.assign({}, props.projection)).populate("Course", { path: "course", select });
+                    res = yield this.QuestionModel.find({ _id: { $in: id } }, Object.assign({}, props.projection));
+                    yield this.QuestionModel.populate(res, { path: "course", select });
                 }
                 return res;
             }
@@ -410,6 +412,13 @@ class Question extends base_1.Base {
                 if (!course)
                     throw new Error("No course found");
                 const keys = Object.keys(params);
+                // if an examtype is provided, check if the course supports it
+                // if it dosen't, pick an examtype from the course at random
+                if (keys.includes("examType") &&
+                    params["examType"] &&
+                    !course.examTypes.includes(params["examType"]))
+                    params["examType"] =
+                        course.examTypes[Math.floor(Math.random() * course.examTypes.length)];
                 //@ts-ignore
                 let match = {
                 // course: props.course,

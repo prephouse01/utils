@@ -76,12 +76,14 @@ export class Question extends Base {
       if (typeof id === "string") {
         res = await this.QuestionModel.findById(id, {
           ...props.projection,
-        }).populate({ path: "course", select });
+        });
+        await this.QuestionModel.populate(res, { path: "course", select });
       } else if (Array.isArray(id)) {
         res = await this.QuestionModel.find(
           { _id: { $in: id } },
           { ...props.projection }
-        ).populate("Course", { path: "course", select });
+        );
+        await this.QuestionModel.populate(res, { path: "course", select });
       }
       return res;
     } catch (error: any) {
@@ -497,6 +499,17 @@ export class Question extends Base {
 
       type K = keyof typeof params;
       const keys = Object.keys(params) as K[];
+
+      // if an examtype is provided, check if the course supports it
+      // if it dosen't, pick an examtype from the course at random
+
+      if (
+        keys.includes("examType") &&
+        params["examType"] &&
+        !course.examTypes.includes(params["examType"])
+      )
+        params["examType"] =
+          course.examTypes[Math.floor(Math.random() * course.examTypes.length)];
 
       //@ts-ignore
       let match: Record<K, any> = {
