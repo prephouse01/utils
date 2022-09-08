@@ -99,11 +99,39 @@ class Course extends base_1.Base {
             }
         });
     }
-    findMultiple() {
+    /**
+     * @description
+     * Find multiple courses using the following conditions in order of prefrence
+     * 1. Without a parameter
+     * 2. By Id's
+     * 3. By category
+     * 4. By course title
+     *
+     * @returns an array of courses or an empty array
+     * */
+    findMultiple(props) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const courses = yield this.CourseModel.find();
+                const params = (0, validateOptions_1.validateOption)(course_schema_1.findMultipleCourseSchema)(props);
+                const keys = Object.keys(params);
+                let courses = [];
+                if (keys.length === 0)
+                    courses = yield this.CourseModel.find();
+                else {
+                    if (params["ids"])
+                        courses = yield this.CourseModel.find({
+                            _id: { $in: params["ids"] },
+                        });
+                    else if (params["category"])
+                        courses = yield this.CourseModel.find({
+                            category: { $eq: params["category"] },
+                        });
+                    else if (params["course"])
+                        courses = yield this.CourseModel.find({
+                            course: { $in: params["course"] },
+                        });
+                }
                 return courses;
             }
             catch (error) {

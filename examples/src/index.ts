@@ -1,17 +1,17 @@
 import "dotenv/config";
 import { Course, Question } from "../../src";
 
-const question = new Question({
-  DB_URL: process.env.DB_URL as string,
-  UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
-  REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
-});
-
-// const course = new Course({
+// const question = new Question({
 //   DB_URL: process.env.DB_URL as string,
 //   UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
 //   REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
 // });
+
+const course = new Course({
+  DB_URL: process.env.DB_URL as string,
+  UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
+  REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
+});
 
 async function ops() {
   // find course
@@ -26,7 +26,6 @@ async function ops() {
   //   .catch((e: any) => {
   //     console.log(e.message);
   //   });
-
   // create course
   // await course
   //   .create({
@@ -42,7 +41,6 @@ async function ops() {
   //   .catch((e: any) => {
   //     console.log(e.message);
   //   });
-
   // answer question
   // await question
   //   .answer({
@@ -56,8 +54,6 @@ async function ops() {
   //   })
   //   .then((q) => console.log(q))
   //   .catch((e: any) => console.log(e.message));
-
-
   // find question
   // await question
   //   .find({
@@ -70,7 +66,6 @@ async function ops() {
   //   })
   //   .then((q) => console.log(q))
   //   .catch((e: any) => console.log(e.message));
-
   // await question
   //   .upload({
   //     question: {
@@ -86,7 +81,6 @@ async function ops() {
   //   })
   //   .then((q) => console.log("q"))
   //   .catch((e) => console.log(e.message));
-
   // 6300e9fa70da4497fe3aad6c
   // course: "62b09b5d8eab8da481309869",
   // await question
@@ -96,6 +90,16 @@ async function ops() {
   //   })
   //   .then((q) => console.log(q))
   //   .catch((e) => console.log(e.message));
+
+  // find course
+  // await course
+  //   .findMultiple({
+  //     // ids: ["62b09b5d8eab8da481309869", "62ff60935583d465bb9cb7c6"],
+  //     // category: "secondary",
+  //     // course: ["mathematics", "geography"]
+  //   })
+  //   .then((q) => console.log(q))
+  //   .catch((e: any) => console.log(e.message));
 }
 
 ops();

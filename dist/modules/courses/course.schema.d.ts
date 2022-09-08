@@ -47,20 +47,58 @@ export declare const deleteCourseSchema: z.ZodObject<{
 }, {
     id: string;
 }>;
-export declare const findOneCourseSchema: z.ZodObject<{
-    id: z.ZodOptional<z.ZodString>;
-    category: z.ZodOptional<z.ZodEnum<["primary", "secondary", "tertiary"]>>;
+export declare const findOneCourseSchema: z.ZodEffects<z.ZodEffects<z.ZodEffects<z.ZodObject<{
     course: z.ZodOptional<z.ZodString>;
+    category: z.ZodOptional<z.ZodString>;
+    id: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     course?: string | undefined;
-    category?: "primary" | "secondary" | "tertiary" | undefined;
+    category?: string | undefined;
     id?: string | undefined;
 }, {
     course?: string | undefined;
-    category?: "primary" | "secondary" | "tertiary" | undefined;
+    category?: string | undefined;
     id?: string | undefined;
+}>, {
+    course?: string | undefined;
+    category?: string | undefined;
+    id?: string | undefined;
+}, {
+    course?: string | undefined;
+    category?: string | undefined;
+    id?: string | undefined;
+}>, {
+    course?: string | undefined;
+    category?: string | undefined;
+    id?: string | undefined;
+}, {
+    course?: string | undefined;
+    category?: string | undefined;
+    id?: string | undefined;
+}>, {
+    course?: string | undefined;
+    category?: string | undefined;
+    id?: string | undefined;
+}, {
+    course?: string | undefined;
+    category?: string | undefined;
+    id?: string | undefined;
+}>;
+export declare const findMultipleCourseSchema: z.ZodObject<{
+    ids: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    category: z.ZodOptional<z.ZodEnum<["primary", "secondary", "tertiary"]>>;
+    course: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+}, "strip", z.ZodTypeAny, {
+    course?: string[] | undefined;
+    category?: "primary" | "secondary" | "tertiary" | undefined;
+    ids?: string[] | undefined;
+}, {
+    course?: string[] | undefined;
+    category?: "primary" | "secondary" | "tertiary" | undefined;
+    ids?: string[] | undefined;
 }>;
 export declare type CreateCourseType = z.infer<typeof createCourseSchema>;
 export declare type EditCourseType = z.infer<typeof editCourseSchema>;
 export declare type DeleteCourseType = z.infer<typeof deleteCourseSchema>;
 export declare type FindOneCourseType = z.infer<typeof findOneCourseSchema>;
+export declare type FindMultipleCourseType = z.infer<typeof findMultipleCourseSchema>;

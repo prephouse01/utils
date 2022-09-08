@@ -6,6 +6,8 @@ import {
   DeleteCourseType,
   editCourseSchema,
   EditCourseType,
+  findMultipleCourseSchema,
+  FindMultipleCourseType,
   findOneCourseSchema,
   FindOneCourseType,
 } from "./course.schema";
@@ -103,9 +105,41 @@ export class Course extends Base {
     }
   }
 
-  async findMultiple() {
+  /**
+   * @description
+   * Find multiple courses using the following conditions in order of prefrence
+   * 1. Without a parameter
+   * 2. By Id's
+   * 3. By category
+   * 4. By course title
+   *
+   * @returns an array of courses or an empty array
+   * */
+
+  async findMultiple(props: FindMultipleCourseType) {
     try {
-      const courses = await this.CourseModel.find();
+      const params = validateOption<FindMultipleCourseType>(
+        findMultipleCourseSchema
+      )(props);
+
+      const keys = Object.keys(params);
+      let courses: ICourse[] = [];
+      if (keys.length === 0) courses = await this.CourseModel.find();
+      else {
+        if (params["ids"])
+          courses = await this.CourseModel.find({
+            _id: { $in: params["ids"] },
+          });
+        else if (params["category"])
+          courses = await this.CourseModel.find({
+            category: { $eq: params["category"] },
+          });
+        else if (params["course"])
+          courses = await this.CourseModel.find({
+            course: { $in: params["course"] },
+          });
+      }
+
       return courses;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to find courses");

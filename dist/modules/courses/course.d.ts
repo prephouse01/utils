@@ -24,7 +24,7 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { courseModel } from "./course.model";
-import { CreateCourseType, DeleteCourseType, EditCourseType, FindOneCourseType } from "./course.schema";
+import { CreateCourseType, DeleteCourseType, EditCourseType, FindMultipleCourseType, FindOneCourseType } from "./course.schema";
 import { Env } from "../../utils/config";
 import { ICourse } from "./course.interface";
 import { Base } from "../../utils/base";
@@ -43,7 +43,15 @@ export declare class Course extends Base {
     findOne(props: FindOneCourseType): Promise<(import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
         _id: import("mongoose").Schema.Types.ObjectId;
     }>) | null>;
-    findMultiple(): Promise<(import("mongoose").Document<unknown, any, ICourse> & ICourse & Required<{
-        _id: import("mongoose").Schema.Types.ObjectId;
-    }>)[]>;
+    /**
+     * @description
+     * Find multiple courses using the following conditions in order of prefrence
+     * 1. Without a parameter
+     * 2. By Id's
+     * 3. By category
+     * 4. By course title
+     *
+     * @returns an array of courses or an empty array
+     * */
+    findMultiple(props: FindMultipleCourseType): Promise<ICourse[]>;
 }

@@ -62,9 +62,16 @@ export const findOneCourseSchema = z
         fatal: true,
       });
     }
-  })
+  });
+
+export const findMultipleCourseSchema = z.object({
+  ids: z.array(z.string()).optional(),
+  category: category.optional(),
+  course: z.array(z.string()).optional(),
+});
 
 export type CreateCourseType = z.infer<typeof createCourseSchema>;
 export type EditCourseType = z.infer<typeof editCourseSchema>;
 export type DeleteCourseType = z.infer<typeof deleteCourseSchema>;
 export type FindOneCourseType = z.infer<typeof findOneCourseSchema>;
+export type FindMultipleCourseType = z.infer<typeof findMultipleCourseSchema>;
