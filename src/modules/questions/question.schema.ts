@@ -73,7 +73,7 @@ export const questionGenerateSchema = z.object({
   course: z.string(),
   difficulty: z.number().optional(),
   examType: z.string().optional(),
-  noOfQuestions: z.number().min(1),
+  qty: z.number().min(1).max(100, "Limit exceeded"),
 });
 
 export type FindQuestionType = z.infer<typeof findQuestionSchema>;

@@ -487,8 +487,8 @@ export class Question extends Base {
   }
 
   async generate({
-    difficulty = 70,
-    noOfQuestions,
+    difficulty = 0.7,
+    qty,
     ...props
   }: QuestionGenerate) {
     try {
@@ -514,7 +514,7 @@ export class Question extends Base {
       //@ts-ignore
       let match: Record<K, any> = {
         // course: props.course,
-        // noOfQuestions: props.noOfQuestions,
+        // qty: props.qty,
         // difficulty: props.difficulty,
         // examType: props.examType,
       };
@@ -565,7 +565,7 @@ export class Question extends Base {
       let parsedCourses = [course._id];
 
       // run the while loop a maximum of 5 times
-      while (questions.length < noOfQuestions || lap > 5) {
+      while (questions.length < qty || lap > 5) {
         if (!course) break;
         let activeCourse = course;
 
@@ -641,7 +641,7 @@ export class Question extends Base {
                 $match: x,
               },
               { $project: project },
-              { $sample: { size: noOfQuestions - questions.length } },
+              { $sample: { size: qty - questions.length } },
             ]).exec()
           )
         );
@@ -650,7 +650,7 @@ export class Question extends Base {
           questions = questions.concat(q);
         });
 
-        questions = questions.slice(0, noOfQuestions);
+        questions = questions.slice(0, qty);
         await this.QuestionModel.populate(questions, {
           path: "course",
           select: "avatar course category",

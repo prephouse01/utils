@@ -1,17 +1,17 @@
 import "dotenv/config";
 import { Course, Question } from "../../src";
 
-// const question = new Question({
-//   DB_URL: process.env.DB_URL as string,
-//   UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
-//   REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
-// });
-
-const course = new Course({
+const question = new Question({
   DB_URL: process.env.DB_URL as string,
   UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
   REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
 });
+
+// const course = new Course({
+//   DB_URL: process.env.DB_URL as string,
+//   UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
+//   REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
+// });
 
 async function ops() {
   // find course
@@ -26,6 +26,7 @@ async function ops() {
   //   .catch((e: any) => {
   //     console.log(e.message);
   //   });
+
   // create course
   // await course
   //   .create({
@@ -41,6 +42,7 @@ async function ops() {
   //   .catch((e: any) => {
   //     console.log(e.message);
   //   });
+
   // answer question
   // await question
   //   .answer({
@@ -54,18 +56,19 @@ async function ops() {
   //   })
   //   .then((q) => console.log(q))
   //   .catch((e: any) => console.log(e.message));
+ 
   // find question
-  // await question
-  //   .find({
-  //     id: "6307791e8ae767b1fc3fb6ec",
-  //     // projection: {
-  //     //   stats: 1,
-  //     //   options: 0,
-  //     // },
-  //     // select: "topics",
-  //   })
-  //   .then((q) => console.log(q))
-  //   .catch((e: any) => console.log(e.message));
+  await question
+    .find({
+      id: "6307791e8ae767b1fc3fb6ec",
+      // projection: {
+      //   stats: 1,
+      //   options: 0,
+      // },
+      // select: "topics",
+    })
+    .then((q) => console.log(q))
+    .catch((e: any) => console.log(e.message));
   // await question
   //   .upload({
   //     question: {
