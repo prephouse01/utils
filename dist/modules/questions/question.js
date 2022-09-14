@@ -404,7 +404,7 @@ class Question extends base_1.Base {
     }
     generate(_a) {
         var _b;
-        var { difficulty = 70, noOfQuestions } = _a, props = __rest(_a, ["difficulty", "noOfQuestions"]);
+        var { difficulty = 0.7, qty } = _a, props = __rest(_a, ["difficulty", "qty"]);
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const params = Object.assign(Object.assign({}, props), { difficulty });
@@ -422,7 +422,7 @@ class Question extends base_1.Base {
                 //@ts-ignore
                 let match = {
                 // course: props.course,
-                // noOfQuestions: props.noOfQuestions,
+                // qty: props.qty,
                 // difficulty: props.difficulty,
                 // examType: props.examType,
                 };
@@ -464,7 +464,7 @@ class Question extends base_1.Base {
                 let questions = [];
                 let parsedCourses = [course._id];
                 // run the while loop a maximum of 5 times
-                while (questions.length < noOfQuestions || lap > 5) {
+                while (questions.length < qty || lap > 5) {
                     if (!course)
                         break;
                     let activeCourse = course;
@@ -524,12 +524,12 @@ class Question extends base_1.Base {
                             $match: x,
                         },
                         { $project: project },
-                        { $sample: { size: noOfQuestions - questions.length } },
+                        { $sample: { size: qty - questions.length } },
                     ]).exec()));
                     quests.forEach((q) => {
                         questions = questions.concat(q);
                     });
-                    questions = questions.slice(0, noOfQuestions);
+                    questions = questions.slice(0, qty);
                     yield this.QuestionModel.populate(questions, {
                         path: "course",
                         select: "avatar course category",

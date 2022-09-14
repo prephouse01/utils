@@ -87,5 +87,5 @@ export declare class Question extends Base {
         failed: number;
         invalidAnswers: number;
     }>;
-    generate({ difficulty, noOfQuestions, ...props }: QuestionGenerate): Promise<Pick<IQuestion, "course" | "examType" | "category" | "options" | "question" | "topic" | "_id" | "instruction">[]>;
+    generate({ difficulty, qty, ...props }: QuestionGenerate): Promise<Pick<IQuestion, "course" | "examType" | "category" | "options" | "question" | "topic" | "_id" | "instruction">[]>;
 }

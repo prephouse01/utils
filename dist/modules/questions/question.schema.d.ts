@@ -231,17 +231,17 @@ export declare const questionGenerateSchema: z.ZodObject<{
     course: z.ZodString;
     difficulty: z.ZodOptional<z.ZodNumber>;
     examType: z.ZodOptional<z.ZodString>;
-    noOfQuestions: z.ZodNumber;
+    qty: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     examType?: string | undefined;
     difficulty?: number | undefined;
     course: string;
-    noOfQuestions: number;
+    qty: number;
 }, {
     examType?: string | undefined;
     difficulty?: number | undefined;
     course: string;
-    noOfQuestions: number;
+    qty: number;
 }>;
 export declare type FindQuestionType = z.infer<typeof findQuestionSchema>;
 export declare type QuestionUploadType = z.infer<typeof questionUploadSchema>;

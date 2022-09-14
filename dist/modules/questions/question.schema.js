@@ -65,5 +65,5 @@ exports.questionGenerateSchema = zod_1.z.object({
     course: zod_1.z.string(),
     difficulty: zod_1.z.number().optional(),
     examType: zod_1.z.string().optional(),
-    noOfQuestions: zod_1.z.number().min(1),
+    qty: zod_1.z.number().min(1).max(100, "Limit exceeded"),
 });
