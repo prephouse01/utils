@@ -2,11 +2,12 @@
   "name": "@prephouse/utils",
   "version": "1.0.0",
   "description": "a library to hold resources used in both the admin and developer APIs",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "husky install",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "package": "yarn run build && npm link"
   },
   "keywords": [
