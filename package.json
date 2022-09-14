@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "node ./husky.js",
-    "postinstall": "husky ./husky.js",
+    "postinstall": "node ./husky.js",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json"
