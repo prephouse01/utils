@@ -6,12 +6,11 @@
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "husky install",
-    "postinstall": "husky install",
+    "prepare": "node ./husky.js",
+    "postinstall": "husky ./husky.js",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "package": "yarn run build && npm link"
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json"
   },
   "keywords": [
     "prephouse",
