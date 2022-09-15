@@ -6,11 +6,12 @@
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "node ./husky.js",
-    "postinstall": "node ./husky.js",
+    "prepare": "husky install",
+    "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json"
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "prephouse",
@@ -34,5 +35,16 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prephouse01/utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prephouse01/utils/issues"
+  },
+  "homepage": "https://github.com/prephouse01/utils#readme"
 }
