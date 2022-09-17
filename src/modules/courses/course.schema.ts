@@ -24,15 +24,20 @@ export const editCourseSchema = z.object({
 });
 
 export const deleteCourseSchema = z.object({
-  id: z.string({ required_error: "A course id is required" }),
+  id: z.string({
+    required_error: "A course id is required",
+    invalid_type_error: "id should be a string",
+  }),
 });
 
 export const findOneCourseSchema = z
   .object(
     {
-      course: z.string().optional(),
+      course: z
+        .string({ invalid_type_error: "course should be a string" })
+        .optional(),
       category: z.string().optional(),
-      id: z.string().optional(),
+      id: z.string({ invalid_type_error: "id should be a string" }).optional(),
     },
     { required_error: "No query parameters" }
   )
@@ -65,9 +70,17 @@ export const findOneCourseSchema = z
   });
 
 export const findMultipleCourseSchema = z.object({
-  ids: z.array(z.string()).optional(),
+  ids: z
+    .array(z.string({ invalid_type_error: "ids should be a string" }), {
+      invalid_type_error: "ids should be an array of strings",
+    })
+    .optional(),
   category: category.optional(),
-  course: z.array(z.string()).optional(),
+  course: z
+    .array(z.string({ invalid_type_error: "course should be a string" }), {
+      invalid_type_error: "course should be an array of string",
+    })
+    .optional(),
 });
 
 export type CreateCourseType = z.infer<typeof createCourseSchema>;
