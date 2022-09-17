@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { Admin } from "./admin.interface";
 import { connectDB } from "../../utils/connectDB";
 
@@ -94,8 +94,10 @@ const adminSchema = new Schema<Admin>(
   }
 );
 
-export function adminModel(M: ReturnType<typeof connectDB>) {
+function adminModel(M: ReturnType<typeof connectDB>) {
   return M.model<Admin>("Admin", adminSchema);
 }
+
+export { adminSchema, creatorPermissions, adminModel };
 
 // export const AdminModel = model<Admin>("Admin", adminSchema);

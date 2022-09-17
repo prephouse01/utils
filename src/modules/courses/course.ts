@@ -13,8 +13,7 @@ import {
 } from "./course.schema";
 import { omit } from "lodash";
 import { validateOption } from "../../utils/validateOptions";
-import { config, Env } from "../../utils/config";
-import { connectDB, disconnectDB } from "../../utils/connectDB";
+import { Env } from "../../utils/config";
 import { ICourse } from "./course.interface";
 import { Base } from "../../utils/base";
 
@@ -77,18 +76,23 @@ export class Course extends Base {
     }
   }
 
-  // /**
-  //  * @description find a course by id or course and category
-  //  * @param props
-  //  * @returns {ICourse} course
-  //  */
+  /**
+   * @description
+   * find a course using the following parameters in order of prefrence
+   * - id
+   * - course and category
+   * @returns
+   * a course or null
+   */
   async findOne(props: FindOneCourseType) {
     try {
       const { id, course, category } = validateOption<
         FindOneCourseType,
         typeof findOneCourseSchema
       >(findOneCourseSchema)(props);
-      let c;
+
+      let c = null;
+
       if (id) {
         c = await this.CourseModel.findById(id);
       } else if (course && category) {
@@ -96,9 +100,8 @@ export class Course extends Base {
           course,
           category,
         });
-      } else {
-        throw new Error("Invalid search parameters");
       }
+
       return c;
     } catch (error: any) {
       throw new Error(error.message ?? "Failed to fetch course");

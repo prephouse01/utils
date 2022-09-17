@@ -7,25 +7,25 @@ const question = new Question({
   REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
 });
 
-// const course = new Course({
-//   DB_URL: process.env.DB_URL as string,
-//   UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
-//   REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
-// });
+const course = new Course({
+  DB_URL: process.env.DB_URL as string,
+  UPLOAD_QUESTION_COST: Number(process.env.UPLOAD_QUESTION_COST),
+  REVIEW_QUESTION_COST: Number(process.env.REVIEW_QUESTION_COST),
+});
 
 async function ops() {
   // find course
-  // await course
-  //   .findOne({
-  //     id: "62b09b5d8eab8da481309869",
-  //   })
-  //   .then((c) => {
-  //     console.log(c);
-  //     return;
-  //   })
-  //   .catch((e: any) => {
-  //     console.log(e.message);
-  //   });
+  await course
+    .findOne({
+      id: "62b09b5d8eab8da481309869",
+    })
+    .then((c) => {
+      console.info("find a course:\t", c, "\n\n");
+      return;
+    })
+    .catch((e: any) => {
+      console.error(e.message, "\n\n");
+    });
 
   // create course
   // await course
@@ -56,7 +56,7 @@ async function ops() {
   //   })
   //   .then((q) => console.log(q))
   //   .catch((e: any) => console.log(e.message));
- 
+
   // find question
   await question
     .find({
@@ -69,6 +69,7 @@ async function ops() {
     })
     .then((q) => console.log(q))
     .catch((e: any) => console.log(e.message));
+
   // await question
   //   .upload({
   //     question: {

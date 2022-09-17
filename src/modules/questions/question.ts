@@ -64,15 +64,15 @@ export class Question extends Base {
   // }
 
   /**
-   *
-   * @param props
-   * @returns
+   * @description
+   * find a single question or an array of question if an array or a string is passed
    */
   async find(props: FindQuestionType) {
     try {
       const { id, select = "" } =
         validateOption<FindQuestionType>(findQuestionSchema)(props);
-      let res;
+      let res = null;
+
       if (typeof id === "string") {
         res = await this.QuestionModel.findById(id, {
           ...props.projection,
@@ -85,6 +85,7 @@ export class Question extends Base {
         );
         await this.QuestionModel.populate(res, { path: "course", select });
       }
+
       return res;
     } catch (error: any) {
       throw new Error(error.message ?? "Didn't find a question");
@@ -486,11 +487,7 @@ export class Question extends Base {
     }
   }
 
-  async generate({
-    difficulty = 0.7,
-    qty,
-    ...props
-  }: QuestionGenerate) {
+  async generate({ difficulty = 0.7, qty, ...props }: QuestionGenerate) {
     try {
       const params = { ...props, difficulty };
       let course = await this.CourseModel.findById(params.course);
