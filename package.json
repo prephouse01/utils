@@ -1,6 +1,6 @@
 {
   "name": "@prephouse/utils",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "a library to hold resources used in both the admin and developer APIs",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "example": "cd examples && yarn run dev"
   },
   "keywords": [

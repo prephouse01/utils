@@ -15,17 +15,17 @@ const course = new Course({
 
 async function ops() {
   // find course
-  await course
-    .findOne({
-      id: "62b09b5d8eab8da481309869",
-    })
-    .then((c) => {
-      console.info("find a course:\t", c, "\n\n");
-      return;
-    })
-    .catch((e: any) => {
-      console.error(e.message, "\n\n");
-    });
+  // await course
+  //   .findOne({
+  //     id: "62b09b5d8eab8da481309869",
+  //   })
+  //   .then((c) => {
+  //     console.info("find a course:\t", c, "\n\n");
+  //     return;
+  //   })
+  //   .catch((e: any) => {
+  //     console.error(e.message, "\n\n");
+  //   });
 
   // create course
   // await course
@@ -58,17 +58,17 @@ async function ops() {
   //   .catch((e: any) => console.log(e.message));
 
   // find question
-  await question
-    .find({
-      id: "6307791e8ae767b1fc3fb6ec",
-      // projection: {
-      //   stats: 1,
-      //   options: 0,
-      // },
-      // select: "topics",
-    })
-    .then((q) => console.log(q))
-    .catch((e: any) => console.log(e.message));
+  // await question
+  //   .find({
+  //     id: "6307791e8ae767b1fc3fb6ec",
+  //     // projection: {
+  //     //   stats: 1,
+  //     //   options: 0,
+  //     // },
+  //     // select: "topics",
+  //   })
+  //   .then((q) => console.log(q))
+  //   .catch((e: any) => console.log(e.message));
 
   // await question
   //   .upload({
@@ -87,10 +87,14 @@ async function ops() {
   //   .catch((e) => console.log(e.message));
   // 6300e9fa70da4497fe3aad6c
   // course: "62b09b5d8eab8da481309869",
+  //
+
+  // GENERATE QUESTIONS
+
   // await question
   //   .generate({
   //     course: "62b09b5d8eab8da481309869",
-  //     noOfQuestions: 10,
+  //     qty: 10,
   //   })
   //   .then((q) => console.log(q))
   //   .catch((e) => console.log(e.message));
